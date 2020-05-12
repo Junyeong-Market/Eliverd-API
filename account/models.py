@@ -1,3 +1,4 @@
+import datetime
 import uuid
 
 from django.db import models
@@ -17,6 +18,12 @@ class User(models.Model):
 
 
 class Session(models.Model):
+
+    def __init__(self):
+        super(Session, self).__init__()
+        expire = datetime.datetime.now()
+        expire.replace(day=expire.day+3)
+        self.expireAt = expire
 
     def __str__(self):
         return str(self.id)
