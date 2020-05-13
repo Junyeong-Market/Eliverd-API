@@ -34,3 +34,12 @@ class UserInfoAPI(APIView):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         return Response(status=status.HTTP_200_OK)
 
+
+class SessionAPI(APIView):
+    @permission_classes([NotLoggedIn])
+    def post(self, request):
+        return Response()
+
+    @permission_classes([LoggedIn])
+    def delete(self, request):
+        return Response()
