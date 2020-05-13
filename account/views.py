@@ -8,11 +8,16 @@ from account.serializer import UserSerializer
 
 
 @api_view(['POST'])
+@authentication_classes([NotLoggedIn])
 def create_user(request):
+    """
+    Create New User
+    :return: Created User
+    """
     new_user = UserSerializer(data=request.data)
     if new_user.is_valid():
         new_user.save()
-        return Response(new_user.data, status=status.HTTP_201_CREATED)
+        return Response({'data': new_user.data}, status=status.HTTP_201_CREATED)
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
