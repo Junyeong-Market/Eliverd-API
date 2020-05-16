@@ -4,5 +4,6 @@ django-filter==2.2.0
 djangorestframework==3.11.0
 Markdown==3.2.2
 mysqlclient==1.4.6
+python-dotenv==0.13.0
 pytz==2020.1
 sqlparse==0.3.1

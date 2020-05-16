@@ -247,3 +247,4 @@ modules.xml
 # End of https://www.gitignore.io/api/django,python,pycharm+iml
 
 venv/
+.env*
