@@ -16,3 +16,11 @@ class Store(geo_models.Model):
     location = geo_models.PointField(null=False)
 
 
+class Product(models.Model):
+    def __str__(self):
+        return self.name
+
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=128, null=False)
+    manufacturer = models.ForeignKey()
+
