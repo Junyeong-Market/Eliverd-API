@@ -248,5 +248,9 @@ modules.xml
 
 venv/
 .env*
-geos-*.tar.bz2
+geos-*.tar.*
 geos-*/
+proj-*.tar.*
+proj-*/
+gdal-*.tar.*
+gdal-*/
