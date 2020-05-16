@@ -29,5 +29,5 @@ class Session(models.Model):
         return str(self.id)
 
     id = models.CharField(max_length=100, unique=True, primary_key=True, default=uuid.uuid4())
-    pid = models.ForeignKey(User, on_delete=models.CASCADE)
+    pid = models.ForeignKey(User, to_field=User.pid, on_delete=models.CASCADE)
     expireAt = models.DateTimeField()
