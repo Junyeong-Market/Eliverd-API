@@ -11,9 +11,9 @@ class User(models.Model):
         return str(self.id)
 
     pid = models.AutoField(primary_key=True)
-    id = models.CharField(unique=True)
+    user_id = models.CharField(max_length=50, unique=True)
     password = models.CharField(max_length=64)
-    nickname = models.CharField(unique=True)
+    nickname = models.CharField(max_length=50, unique=True)
     isSeller = models.BooleanField(null=False, default=False)
 
 
@@ -28,6 +28,6 @@ class Session(models.Model):
     def __str__(self):
         return str(self.id)
 
-    id = models.CharField(unique=True, default=uuid.uuid4())
+    id = models.CharField(max_length=100, unique=True, primary_key=True, default=uuid.uuid4())
     pid = models.ForeignKey(User, on_delete=models.CASCADE)
     expireAt = models.DateTimeField()
