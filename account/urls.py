@@ -1,4 +1,4 @@
-from django.urls import include, path
+from django.urls import path
 from account.views import UserInfoAPI, SessionAPI, create_user
 
 urlpatterns = [
