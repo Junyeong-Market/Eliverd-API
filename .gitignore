@@ -248,3 +248,5 @@ modules.xml
 
 venv/
 .env*
+geos-*.tar.bz2
+geos-*/
