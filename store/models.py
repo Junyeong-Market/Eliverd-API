@@ -15,4 +15,5 @@ class Store(geo_models.Model):
     registerer = geo_models.ForeignKey(User, to_field=User.pid, on_delete=geo_models.CASCADE)
     registered_number = geo_models.CharField(max_length=10)
     location = geo_models.PointField(null=False)
+    products = geo_models.ManyToManyField(Product)
 
