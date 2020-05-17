@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.gis',
     'rest_framework',
     'account',
+    'product',
     'store'
 ]
 
@@ -84,7 +85,7 @@ WSGI_APPLICATION = 'eliverd.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.contrib.gis.db.backends.mysql',
         'NAME': os.getenv('DB_NAME'),
         'USER': os.getenv('DB_USER'),
         'PASSWORD': os.getenv('DB_PW'),
