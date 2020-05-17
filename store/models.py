@@ -12,7 +12,7 @@ class Store(geo_models.Model):
     id = geo_models.AutoField(primary_key=True)
     name = geo_models.CharField(max_length=50, null=False)
     description = geo_models.TextField(null=False)
-    registerer = geo_models.ForeignKey(User, to_field=User.pid, on_delete=geo_models.CASCADE)
+    registerer = geo_models.ForeignKey(User, on_delete=geo_models.CASCADE)
     registered_number = geo_models.CharField(max_length=10)
     location = geo_models.PointField(null=False)
     products = geo_models.ManyToManyField(Product)
