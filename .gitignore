@@ -254,3 +254,5 @@ proj-*.tar.*
 proj-*/
 gdal-*.tar.*
 gdal-*/
+
+.idea/
