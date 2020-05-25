@@ -25,3 +25,11 @@ class RadiusStoreView(ListAPIView):
 #
 #     def get_queryset(self):
 #         return Store.objects.filter()
+
+
+class StoreStockView(ListAPIView):
+    queryset = Store.objects.filter()
+    serializer_class = StoreSerializer
+
+    def get_queryset(self):
+        return Store.objects.filter(id=self.kwargs['id'])
