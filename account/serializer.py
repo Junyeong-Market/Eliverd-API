@@ -8,7 +8,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['user_id', 'password', 'nickname', 'is_seller']
 
 
-class SessionSerializer(serializers.HyperlinkedModelSerializer):
+class SessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Session
-        fields = ['pid']
+        fields = ['id', 'pid']

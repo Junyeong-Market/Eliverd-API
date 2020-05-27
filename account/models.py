@@ -1,4 +1,5 @@
 import datetime
+import logging
 import hashlib
 import uuid
 
@@ -6,11 +7,14 @@ from django.db import models
 
 # Create your models here.
 
+logger = logging.getLogger(__name__)
+
 
 class User(models.Model):
     def __init__(self, *args, **kwargs):
         super(User, self).__init__(*args, **kwargs)
-        self.password = hashlib.sha512(str(kwargs['password']).encode('utf-8')).hexdigest()
+        self.password = hashlib.sha512(str(kwargs['password']).encode('utf-8')).hexdigest()\
+            if kwargs.get('password') else self.password
 
     def __str__(self):
         return str(self.user_id)
