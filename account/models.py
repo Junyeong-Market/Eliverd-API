@@ -1,4 +1,5 @@
 import datetime
+import hashlib
 import uuid
 
 from django.db import models
@@ -7,6 +8,10 @@ from django.db import models
 
 
 class User(models.Model):
+    def __init__(self, *args, **kwargs):
+        super(User, self).__init__(*args, **kwargs)
+        self.password = hashlib.sha512(str(kwargs['password']).encode('utf-8')).hexdigest()
+
     def __str__(self):
         return str(self.user_id)
 
