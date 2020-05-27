@@ -11,7 +11,10 @@ from account.serializer import UserSerializer
 class RegisterAPI(CreateAPIView):
     serializer_class = UserSerializer
     permission_classes = [NotLoggedIn]
-    pass
+
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        return Response(status=response.status_code)
 
 
 class UserInfoAPI(APIView):
