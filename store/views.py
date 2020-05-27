@@ -1,10 +1,8 @@
 from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import D
-from rest_framework.decorators import api_view
 from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView, RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.viewsets import ModelViewSet
 
 from store.models import Store
 from store.serializer import StoreSerializer
