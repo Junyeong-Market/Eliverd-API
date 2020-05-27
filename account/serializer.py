@@ -1,14 +1,14 @@
-from account.models import User
+from account.models import User, Session
 from rest_framework import serializers
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        field = ['pid', 'id', 'password', 'nickname', 'isSeller']
+        fields = ['user_id', 'password', 'nickname', 'is_seller']
 
 
 class SessionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = User
-        field = ['pid', 'id', 'password', 'nickname', 'isSeller']
+        model = Session
+        fields = ['pid']
