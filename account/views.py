@@ -1,5 +1,6 @@
 from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import permission_classes
+from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -7,20 +8,10 @@ from account.permissions import NotLoggedIn, LoggedIn
 from account.serializer import UserSerializer
 
 
-@api_view(['PUT'])
-@permission_classes([NotLoggedIn])
-def create_user(request):
-    """
-    Create New User
-    :return: Created User
-    """
-    new_user = UserSerializer(data=request.data, context={
-            'request': request,
-        })
-    if new_user.is_valid():
-        new_user.save()
-        return Response({'data': new_user.data}, status=status.HTTP_201_CREATED)
-    return Response(status=status.HTTP_400_BAD_REQUEST)
+class RegisterAPI(CreateAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [NotLoggedIn]
+    pass
 
 
 class UserInfoAPI(APIView):
