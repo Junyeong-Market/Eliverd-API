@@ -14,7 +14,7 @@ class User(models.Model):
     user_id = models.CharField(max_length=50, unique=True)
     password = models.CharField(max_length=64)
     nickname = models.CharField(max_length=50, unique=True)
-    isSeller = models.BooleanField(null=False, default=False)
+    is_seller = models.BooleanField(null=False, default=False)
 
 
 class Session(models.Model):
