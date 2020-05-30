@@ -1,5 +1,4 @@
 from django.contrib.gis.geos import Point
-from django.contrib.gis.measure import D
 from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView, RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -14,7 +13,6 @@ class RadiusStoreList(ListAPIView):
 
     def get_queryset(self):
         point = Point(float(self.request.query_params.get('lat')), float(self.request.query_params.get('lng')))
-        # distance = D(m=float(self.request.query_params.get('distance')))
         return Store.objects.filter(location__distance_lte=(point, float(self.request.query_params.get('distance'))))
 
     @classmethod
