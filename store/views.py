@@ -38,3 +38,10 @@ class StoreStockListAPI(ListAPIView):
     def get_queryset(self):
         return Stock.objects.filter(id=self.kwargs['id'])
 
+
+class AddStockAPI(CreateAPIView):
+    serializer_class = StockSerializer
+
+    def post(self, request, *args, **kwargs):
+        # TODO: somehow manually generate ian
+        return super().post(request, *args, **kwargs)
