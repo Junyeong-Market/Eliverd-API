@@ -3,8 +3,8 @@ from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView, R
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from store.models import Store
-from store.serializer import StoreSerializer
+from store.models import Store, Stock
+from store.serializer import StoreSerializer, StockSerializer
 
 
 class RadiusStoreList(ListAPIView):
@@ -33,10 +33,9 @@ class StoreView(RetrieveAPIView):
         return Store.objects.get(id=self.kwargs['id'])
 
 
-class StoreStockList(RetrieveAPIView):
-    queryset = Store.objects.filter()
-    serializer_class = StoreSerializer
-    lookup_field = 'products'
+class StoreStockListAPI(ListAPIView):
+    queryset = Stock.objects.filter()
+    serializer_class = StockSerializer
 
     def get_queryset(self):
         return Store.objects.filter(id=self.kwargs['id'])
