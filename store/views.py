@@ -27,10 +27,10 @@ class RadiusStoreList(ListAPIView):
 #     def get_queryset(self):
 #         return Store.objects.filter()
 
-class StoreView(APIView):
+class StoreView(RetrieveAPIView):
 
-    def get(self):
-        return Response(Store.objects.get(id=self.kwargs['id']))
+    def get_object(self):
+        return Store.objects.get(id=self.kwargs['id'])
 
 
 class StoreStockList(RetrieveAPIView):
