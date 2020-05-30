@@ -36,4 +36,5 @@ class StoreStockListAPI(ListAPIView):
     serializer_class = StockSerializer
 
     def get_queryset(self):
-        return Store.objects.filter(id=self.kwargs['id'])
+        return Stock.objects.filter(id=self.kwargs['id'])
+
