@@ -15,5 +15,10 @@ class Store(geo_models.Model):
     registerer = geo_models.ForeignKey(User, on_delete=geo_models.CASCADE)
     registered_number = geo_models.CharField(max_length=10)
     location = geo_models.PointField(null=False)
-    products = geo_models.ManyToManyField(Product)
 
+
+class Stock(models.Model):
+    store = models.ForeignKey(Store, on_delete=models.CASCADE, null=False)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=False)
+    price = models.PositiveIntegerField(null=False)
+    amount = models.PositiveIntegerField(null=False)
