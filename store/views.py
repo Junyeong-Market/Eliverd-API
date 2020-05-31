@@ -65,3 +65,6 @@ class AddStockAPI(CreateAPIView):
 class RemoveStockAPI(DestroyAPIView):
     queryset = Stock.objects.all()
     serializer_class = StockSerializer
+
+    def get_queryset(self):
+        return Stock.objects.filter(store=self.kwargs['id'], product=self.kwargs['product'])
