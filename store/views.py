@@ -1,5 +1,5 @@
 from django.contrib.gis.geos import Point
-from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, DestroyAPIView
 
 from product.models import Product
 from product.views import CreateProductAPI
@@ -60,3 +60,8 @@ class AddStockAPI(CreateAPIView):
             'amount': request.data.get('amount')
         }
         return super().post(request, *args, **kwargs)
+
+
+class RemoveStockAPI(DestroyAPIView):
+    queryset = Stock.objects.all()
+    serializer_class = StockSerializer
