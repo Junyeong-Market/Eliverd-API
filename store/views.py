@@ -1,6 +1,8 @@
 from django.contrib.gis.geos import Point
 from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView
 
+from product.models import Product
+from product.views import CreateProductAPI
 from store.models import Store, Stock
 from store.serializer import StoreSerializer, StockSerializer
 
@@ -43,5 +45,18 @@ class AddStockAPI(CreateAPIView):
     serializer_class = StockSerializer
 
     def post(self, request, *args, **kwargs):
+        ian = request.data.get('ian', None)
+        if request.data.get('name', True):
+            response = CreateProductAPI.post(request, *args, **kwargs)
+            ian = response.data.ian
         # TODO: somehow manually generate ian
+
+        product = Product.objects.get(ian=ian)
+
+        request._full_data = {
+            'store': kwargs['id'],
+            'product': product.id,
+            'price': request.data.get('price'),
+            'amount': request.data.get('amount')
+        }
         return super().post(request, *args, **kwargs)
