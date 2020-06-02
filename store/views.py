@@ -33,6 +33,19 @@ class StoreView(RetrieveAPIView):
         return Store.objects.get(id=self.kwargs['id'])
 
 
+class CreateStoreAPI(CreateAPIView):
+
+    def post(self, request, *args, **kwargs):
+        request._full_data = {
+            'name': request.data.get('name'),
+            'description': request.data.get('description'),
+            'registerer': request.account.pid,
+            'registerer_number': request.data.get('registerer_number'),
+            'location': Point(request.data.get('lat'), request.data.get('lng'))
+        }
+        return super().post(request, *args, **kwargs)
+
+
 class StoreStockListAPI(ListAPIView):
     queryset = Stock.objects.filter()
     serializer_class = StockSerializer
