@@ -9,7 +9,7 @@ class StoreSerializer(serializers.HyperlinkedModelSerializer):
         field = ['name', 'description', 'registerer', 'registerer_number', 'location', 'products']
 
 
-class StockSerializer(serializers.Serializer):
+class StockSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stock
         field = '__all__'
