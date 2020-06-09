@@ -1,0 +1,31 @@
+version: '3.1'
+services:
+  mariadb:
+    container_name: "eliverd_db"
+    image: mariadb
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: eliverd
+      MYSQL_USER: eliverd
+      MYSQL_PASSWORD: eliverd
+      MYSQL_DATABASE: eliverd
+    restart: on-failure
+  server:
+    depends_on:
+      - mariadb
+    container_name: "eliverd_server"
+    build: .
+    ports:
+      - "8000:8000"
+    command: python3 manage.py runserver 8000
+    environment:
+      DB_NAME: eliverd
+      DB_USER: root
+      DB_PW: Wb4H9nn542
+      DB_HOST: localhost
+      DB_PORT: 3306
+    restart: on-failure
+    links:
+      - mariadb
+    image: startergate/eliverd-api

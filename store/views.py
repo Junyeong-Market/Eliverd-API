@@ -28,7 +28,6 @@ class RadiusStoreList(ListAPIView):
 #         return Store.objects.filter()
 
 class StoreView(RetrieveAPIView):
-
     def get_object(self):
         return Store.objects.get(id=self.kwargs['id'])
 
