@@ -5,8 +5,7 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-RUN apt update
+RUN apt-get update
 
-RUN apt install python3
-
-RUN pip install -r requirements.txt
+RUN apt-get install -y libmysqlclient-dev python3-pip build-essential
+RUN pip3 install -r requirements.txt

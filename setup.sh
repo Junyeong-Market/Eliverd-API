@@ -2,13 +2,13 @@
 
 # START: platform specific commands
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-  sudo apt install wget
+  apt install wget
 elif [[ "$OSTYPE" == "darwin"* ]]; then
   brew install openssl
   export LDFLAGS=-L/usr/local/opt/openssl/lib
   brew install wget
   brew install libxml2
-  sudo ln -s /usr/local/opt/libxml2/include/libxml2/libxml /usr/local/include/libxml
+  ln -s /usr/local/opt/libxml2/include/libxml2/libxml /usr/local/include/libxml
 else
   echo "PLATFORM NOT SUPPORTED"
   return
@@ -21,7 +21,7 @@ tar xjf geos-3.8.1.tar.bz2
 cd geos-3.8.1 || exit
 ./configure
 make
-sudo make install
+make install
 cd ..
 rm -r geos-3.8.1
 rm geos-3.8.1.tar.bz2
@@ -39,7 +39,7 @@ tar xzf ../../proj-datumgrid-1.8.tar.gz
 cd ..
 ./configure
 make
-sudo make install
+make install
 cd ..
 rm -r proj-6.3.2
 rm proj-6.3.2.tar.gz
@@ -52,10 +52,10 @@ tar xzf gdal-3.1.0.tar.gz
 cd gdal-3.1.0 || exit
 ./configure --without-pg
 make
-sudo make install
+make install
 cd ..
 rm -r gdal-3.1.0
 rm gdal-3.1.0.tar.gz
 # END
 
-pip install -r requirements.txt
+pip3 install -r requirements.txt
