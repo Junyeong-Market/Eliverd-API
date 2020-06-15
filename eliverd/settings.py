@@ -29,6 +29,7 @@ SECRET_KEY = 'hn$q56^w35)**l7f7l&7npkxxd1rdwc2#2n)3by9gyks(%$ljl'
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    'localhost',
     'donote.co',
     '54.180.21.237'
 ]
