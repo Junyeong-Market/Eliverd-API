@@ -33,13 +33,14 @@ class StoreView(RetrieveAPIView):
 
 
 class CreateStoreAPI(CreateAPIView):
+    serializer_class = StoreSerializer
 
     def post(self, request, *args, **kwargs):
         request._full_data = {
             'name': request.data.get('name'),
             'description': request.data.get('description'),
             'registerer': request.account.pid,
-            'registerer_number': request.data.get('registerer_number'),
+            'registerer_number': request.data.get('registerer_number') or '',
             'location': Point(request.data.get('lat'), request.data.get('lng'))
         }
         return super().post(request, *args, **kwargs)
