@@ -19,7 +19,6 @@ class AuthorizationMiddleware(MiddlewareMixin):
 
             request.account = AnonymousUser
 
-        logger.error(request.account)
         response = self.get_response(request)
 
         return response
