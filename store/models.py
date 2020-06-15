@@ -13,7 +13,7 @@ class Store(geo_models.Model):
     name = geo_models.CharField(max_length=50, null=False)
     description = geo_models.TextField(null=False)
     registerer = geo_models.ManyToManyField(User)
-    registered_number = geo_models.CharField(max_length=10)
+    registered_number = geo_models.CharField(max_length=10, null=True)
     location = geo_models.PointField(null=False)
 
 
