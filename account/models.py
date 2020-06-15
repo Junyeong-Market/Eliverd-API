@@ -29,7 +29,7 @@ class Session(models.Model):
     def __init__(self, *args, **kwargs):
         super(Session, self).__init__(*args, **kwargs)
         expire = datetime.datetime.now()
-        expire.replace(day=expire.day+3)
+        expire = expire.replace(day=expire.day+3)
         self.expireAt = expire
 
     def __str__(self):
