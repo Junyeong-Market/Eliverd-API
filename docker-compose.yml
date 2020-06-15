@@ -18,12 +18,12 @@ services:
     build: .
     ports:
       - "8000:8000"
-    command: python3 manage.py runserver 8000
+    command: python3 manage.py runserver 0.0.0.0:8000
     environment:
       DB_NAME: eliverd
-      DB_USER: root
-      DB_PW: Wb4H9nn542
-      DB_HOST: localhost
+      DB_USER: eliverd
+      DB_PW: eliverd
+      DB_HOST: mariadb
       DB_PORT: 3306
     restart: on-failure
     links:
