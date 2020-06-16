@@ -4,10 +4,9 @@ from store.models import Store, Stock
 
 
 class StoreSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Store
-        fields = ['name', 'description', 'registerer', 'registered_number', 'location']
+        fields = '__all__'
 
 
 class StockSerializer(serializers.ModelSerializer):
