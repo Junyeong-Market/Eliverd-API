@@ -8,6 +8,12 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['user_id', 'password', 'nickname', 'is_seller']
 
 
+class SafeUserSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = User
+        fields = ['user_id', 'nickname', 'is_seller']
+
+
 class SessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Session

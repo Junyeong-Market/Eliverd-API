@@ -1,15 +1,18 @@
 import hashlib
+import logging
 
 from rest_framework import status
 from rest_framework.decorators import permission_classes
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.generics import CreateAPIView, DestroyAPIView
+from rest_framework.generics import CreateAPIView, RetrieveDestroyAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from account.models import Session, User
 from account.permissions import NotLoggedIn, LoggedIn
-from account.serializer import UserSerializer, SessionSerializer
+from account.serializer import UserSerializer, SessionSerializer, SafeUserSerializer
+
+logger = logging.getLogger(__name__)
 
 
 class RegisterAPI(CreateAPIView):
@@ -40,7 +43,7 @@ class UserInfoAPI(APIView):
         return Response(status=status.HTTP_200_OK)
 
 
-class SessionAPI(CreateAPIView, DestroyAPIView):
+class SessionAPI(CreateAPIView, RetrieveDestroyAPIView):
     serializer_class = SessionSerializer
     lookup_field = 'id'
 
@@ -60,6 +63,12 @@ class SessionAPI(CreateAPIView, DestroyAPIView):
     @permission_classes([LoggedIn])
     def delete(self, request, *args, **kwargs):
         return super().delete(request, *args, **kwargs)
+
+    @permission_classes([LoggedIn])
+    def retrieve(self, request, *args, **kwargs):
+        session = self.get_object()
+        serializer = SafeUserSerializer(session.pid)
+        return Response(serializer.data)
 
     def get_object(self):
         try:
