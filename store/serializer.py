@@ -4,12 +4,13 @@ from store.models import Store, Stock
 
 
 class StoreSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Store
-        field = ['name', 'description', 'registerer', 'registerer_number', 'location']
+        fields = ['name', 'description', 'registerer', 'registered_number', 'location']
 
 
 class StockSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stock
-        field = '__all__'
+        fields = '__all__'
