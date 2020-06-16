@@ -18,7 +18,7 @@ services:
     build: .
     ports:
       - "8000:8000"
-    command: python3 manage.py runserver 0.0.0.0:8000
+    command: sh ./entrypoint.sh
     environment:
       DB_NAME: eliverd
       DB_USER: eliverd
