@@ -39,7 +39,7 @@ class CreateStoreAPI(CreateAPIView):
         request._full_data = {
             'name': request.data.get('name'),
             'description': request.data.get('description'),
-            'registerer': request.account.pid,
+            'registerer': [request.account.pid],
             'registerer_number': request.data.get('registerer_number') or '',
             'location': Point(request.data.get('lat'), request.data.get('lng'))
         }
