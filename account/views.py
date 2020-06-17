@@ -11,6 +11,8 @@ from rest_framework.views import APIView
 from account.models import Session, User
 from account.permissions import NotLoggedIn, LoggedIn
 from account.serializer import UserSerializer, SessionSerializer, SafeUserSerializer
+from store.models import Store
+from store.serializer import StoreSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -68,7 +70,11 @@ class SessionAPI(CreateAPIView, RetrieveDestroyAPIView):
     def retrieve(self, request, *args, **kwargs):
         session = self.get_object()
         serializer = SafeUserSerializer(session.pid)
-        return Response(serializer.data)
+        stores = Store.objects.filter(registerer=session.pid)
+        stores = [store.id for store in stores]
+        data = serializer.data
+        data.update({"stores": stores})
+        return Response(data)
 
     def get_object(self):
         try:
