@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 
 
@@ -13,5 +15,5 @@ class Product(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=128, null=False)
     manufacturer = models.ForeignKey(Manufacturer, models.CASCADE)
-    ian = models.CharField(max_length=17, null=True)  # International Article Number == 바코드
+    ian = models.CharField(default=uuid.uuid4())  # International Article Number == 바코드
 

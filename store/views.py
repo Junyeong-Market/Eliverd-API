@@ -1,10 +1,20 @@
+import logging
+import uuid
+
 from django.contrib.gis.geos import Point
+from django.db.models import F
+from django.forms import model_to_dict
 from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, DestroyAPIView
+from rest_framework.mixins import UpdateModelMixin
+from rest_framework.response import Response
 
 from product.models import Product
+from product.serializer import ProductSerializer
 from product.views import CreateProductAPI
 from store.models import Store, Stock
 from store.serializer import StoreSerializer, StockSerializer
+
+logger = logging.getLogger(__name__)
 
 
 class RadiusStoreList(ListAPIView):
@@ -57,7 +67,7 @@ class StoreStockListAPI(ListAPIView):
 class AddStockAPI(CreateAPIView):
     serializer_class = StockSerializer
 
-    def post(self, request, *args, **kwargs):
+    def create(self, request, *args, **kwargs):
         ian = request.data.get('ian', None)
         if request.data.get('name', True):
             response = CreateProductAPI.post(request, *args, **kwargs)
@@ -81,3 +91,41 @@ class RemoveStockAPI(DestroyAPIView):
 
     def get_queryset(self):
         return Stock.objects.filter(store=self.kwargs['id'], product=self.kwargs['product'])
+
+
+class ModifyStockAPI(UpdateModelMixin, CreateAPIView):
+    serializer_class = StockSerializer
+
+    def post(self, request, *args, **kwargs):
+        try:
+            instance = self.get_object()
+            serializer = self.get_serializer(instance, {'amount': instance.amount + request.data.get('amount', 0)})
+            serializer.is_valid(raise_exception=True)
+            self.perform_update(serializer)
+            return Response(serializer.data)
+        except Product.DoesNotExist:
+            serializer = ProductSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            product = serializer.instance
+        except Stock.DoesNotExist:
+            ian = request.data.get('ian', None)
+            product = Product.objects.get(ian=ian)
+        request._full_data = {
+            'store': kwargs['id'],
+            'product': product.id,
+            'price': request.data.get('price'),
+            'amount': request.data.get('amount')
+        }
+        return super().post(request, *args, **kwargs)
+
+
+
+    def get_queryset(self):
+        return Stock.objects.filter(store=self.kwargs['id'], product=self.request.data.get('ian', -1))
+
+    def get_object(self):
+        return Stock.objects.get(store=int(self.kwargs['id']),
+                                 product=Product.objects.get(ian=self.request.data.get('ian', 'notexist')))
+
+
