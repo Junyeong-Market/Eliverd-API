@@ -20,6 +20,7 @@ class User(models.Model):
     pid = models.AutoField(primary_key=True)
     user_id = models.CharField(max_length=50, unique=True)
     password = models.CharField(max_length=256)
+    realname = models.CharField(max_length=128)
     nickname = models.CharField(max_length=50, unique=True)
     is_seller = models.BooleanField(null=False, default=False)
 
