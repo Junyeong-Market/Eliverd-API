@@ -12,7 +12,6 @@ from account.models import Session, User
 from account.permissions import NotLoggedIn, LoggedIn
 from account.serializer import UserSerializer, SessionSerializer, SafeUserSerializer
 from store.models import Store
-from store.serializer import StoreSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -81,3 +80,12 @@ class SessionAPI(CreateAPIView, RetrieveDestroyAPIView):
             return Session.objects.get(id=self.request.headers.get('Authorization'))
         except Session.DoesNotExist:
             raise PermissionDenied
+
+
+class UserDataVerifyAPI(APIView):
+    permission_classes = [NotLoggedIn]
+
+    def post(self, request, *args, **kwargs):
+        serializer = UserSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.validated_data)
