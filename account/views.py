@@ -4,7 +4,7 @@ import logging
 from rest_framework import status
 from rest_framework.decorators import permission_classes
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.generics import CreateAPIView, RetrieveDestroyAPIView
+from rest_framework.generics import CreateAPIView, RetrieveDestroyAPIView, ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -89,3 +89,9 @@ class UserDataVerifyAPI(APIView):
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         return Response(serializer.validated_data)
+
+
+class UserSearchAPI(ListAPIView):
+    def list(self, request, *args, **kwargs):
+
+        return super().list(request, *args, **kwargs)
