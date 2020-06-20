@@ -1,9 +1,6 @@
 import logging
-import uuid
 
 from django.contrib.gis.geos import Point
-from django.db.models import F
-from django.forms import model_to_dict
 from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, DestroyAPIView
 from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
@@ -12,6 +9,7 @@ from product.models import Product
 from product.serializer import ProductSerializer
 from product.views import CreateProductAPI
 from store.models import Store, Stock
+from store.paginator import StoreStockPagination
 from store.serializer import StoreSerializer, StockSerializer
 
 logger = logging.getLogger(__name__)
@@ -59,6 +57,7 @@ class CreateStoreAPI(CreateAPIView):
 class StoreStockListAPI(ListAPIView):
     queryset = Stock.objects.filter()
     serializer_class = StockSerializer
+    pagination_class = StoreStockPagination
 
     def get_queryset(self):
         return Stock.objects.filter(id=self.kwargs['id'])
@@ -122,8 +121,6 @@ class ModifyStockAPI(UpdateModelMixin, CreateAPIView):
             'amount': request.data.get('amount')
         }
         return super().post(request, *args, **kwargs)
-
-
 
     def get_queryset(self):
         return Stock.objects.filter(store=self.kwargs['id'], product=self.request.data.get('ian', -1))
