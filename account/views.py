@@ -92,6 +92,10 @@ class UserDataVerifyAPI(APIView):
 
 
 class UserSearchAPI(ListAPIView):
-    def list(self, request, *args, **kwargs):
+    serializer_class = SafeUserSerializer
 
-        return super().list(request, *args, **kwargs)
+    def get_queryset(self):
+        is_seller = self.request.query_params.get('is_seller', None)
+        if is_seller:
+            return User.objects.filter(realname__contains=self.kwargs['name'], is_seller=is_seller)
+        return User.objects.filter(realname__contains=self.kwargs['name'])
