@@ -59,3 +59,5 @@ rm gdal-3.1.0.tar.gz
 # END
 
 pip3 install -r requirements.txt
+
+python3 manage.py migrate
