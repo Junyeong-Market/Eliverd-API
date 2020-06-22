@@ -9,7 +9,7 @@ from product.models import Product
 from product.serializer import ProductSerializer
 from product.views import CreateProductAPI
 from store.models import Store, Stock
-from store.paginator import StoreStockPagination
+from store.pagination import StoreStockPagination
 from store.serializer import StoreSerializer, StockSerializer
 
 logger = logging.getLogger(__name__)
