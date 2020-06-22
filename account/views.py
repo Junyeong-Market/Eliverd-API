@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from account.models import Session, User
+from account.pagination import AccountSearchPagination
 from account.permissions import NotLoggedIn, LoggedIn
 from account.serializer import UserSerializer, SessionSerializer, SafeUserSerializer
 from store.models import Store
@@ -93,6 +94,7 @@ class UserDataVerifyAPI(APIView):
 
 class UserSearchAPI(ListAPIView):
     serializer_class = SafeUserSerializer
+    pagination_class = AccountSearchPagination
 
     def get_queryset(self):
         is_seller = self.request.query_params.get('is_seller', None)
