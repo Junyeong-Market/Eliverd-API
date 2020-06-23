@@ -13,3 +13,10 @@ SessionCreateSuccessful = openapi.Schema(
         'session': SessionKey
     }
 )
+
+AuthorizationHeader = openapi.Parameter(
+    'Authorization',
+    openapi.IN_HEADER,
+    description='세션 헤더',
+    type=openapi.TYPE_STRING
+)

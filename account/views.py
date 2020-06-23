@@ -9,7 +9,7 @@ from rest_framework.generics import CreateAPIView, RetrieveDestroyAPIView, ListA
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from account.documentation.session import SessionCreateSuccessful
+from account.documentation.session import SessionCreateSuccessful, AuthorizationHeader
 from account.documentation.user import UserSearchParameter
 from account.models import Session, User
 from account.pagination import AccountSearchPagination
@@ -74,8 +74,14 @@ class SessionAPI(CreateAPIView, RetrieveDestroyAPIView):
     def delete(self, request, *args, **kwargs):
         return super().delete(request, *args, **kwargs)
 
+    @swagger_auto_schema(operation_summary='세션 정보 조회',
+                         operation_description='현재 세션 유저의 정보를 조회합니다.',
+                         manual_parameters=[AuthorizationHeader],
+                         responses={
+                             200: SafeUserSerializer
+                         })
     @permission_classes([LoggedIn])
-    def retrieve(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         session = self.get_object()
         serializer = SafeUserSerializer(session.pid)
         stores = Store.objects.filter(registerer=session.pid)
