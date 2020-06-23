@@ -52,9 +52,11 @@ class SessionAPI(CreateAPIView, RetrieveDestroyAPIView):
     serializer_class = SessionSerializer
     lookup_field = 'id'
 
-    @swagger_auto_schema(responses={
-        200: SessionCreateSuccessful
-    })
+    @swagger_auto_schema(operation_summary='세션 생성 (로그인)',
+                         operation_description='로그인 정보를 보내서 세션을 생성합니다.',
+                         responses={
+                             200: SessionCreateSuccessful
+                         })
     @permission_classes([NotLoggedIn])
     def post(self, request, *args, **kwargs):
         try:
