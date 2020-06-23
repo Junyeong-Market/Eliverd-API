@@ -6,7 +6,7 @@ session_field = openapi.Schema(
     type=openapi.TYPE_STRING
 )
 
-SessionCreateSuccessful = openapi.Schema(
+SessionCreateSuccessful = openapi.Response(
     '세션 생성됨',
     type=openapi.TYPE_OBJECT,
     properties={
