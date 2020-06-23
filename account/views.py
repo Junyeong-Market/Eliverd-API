@@ -70,6 +70,9 @@ class SessionAPI(CreateAPIView, RetrieveDestroyAPIView):
         except User.DoesNotExist:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
+    @swagger_auto_schema(operation_summary='세션 삭제 (로그아웃)',
+                         operation_description='현재 세션을 삭제합니다.',
+                         manual_parameters=[AuthorizationHeader])
     @permission_classes([LoggedIn])
     def delete(self, request, *args, **kwargs):
         return super().delete(request, *args, **kwargs)
