@@ -1,6 +1,7 @@
 import hashlib
 import logging
 
+from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.decorators import permission_classes
@@ -9,6 +10,7 @@ from rest_framework.generics import CreateAPIView, RetrieveDestroyAPIView, ListA
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from account.documentation.session import session_field, SessionCreateSuccessful
 from account.models import Session, User
 from account.pagination import AccountSearchPagination
 from account.permissions import NotLoggedIn, LoggedIn
@@ -100,6 +102,11 @@ class UserDataVerifyAPI(APIView):
 class UserSearchAPI(ListAPIView):
     serializer_class = SafeUserSerializer
     pagination_class = AccountSearchPagination
+
+    @swagger_auto_schema(operation_summary='사용자 검색', operation_description='특정 문자열이 포함된 이름을 가지고 있는 유저를 검색힙니다',
+                         query_serializer=UserSearchRequestSerializer)
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
     def get_queryset(self):
         is_seller = self.request.query_params.get('is_seller', None)
