@@ -1,6 +1,7 @@
 import hashlib
 import logging
 
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.decorators import permission_classes
 from rest_framework.exceptions import PermissionDenied
@@ -11,7 +12,8 @@ from rest_framework.views import APIView
 from account.models import Session, User
 from account.pagination import AccountSearchPagination
 from account.permissions import NotLoggedIn, LoggedIn
-from account.serializer import UserSerializer, SessionSerializer, SafeUserSerializer
+from account.serializers.model import UserSerializer, SessionSerializer, SafeUserSerializer
+from account.serializers.request import UserSearchRequestSerializer
 from store.models import Store
 
 logger = logging.getLogger(__name__)
@@ -49,6 +51,9 @@ class SessionAPI(CreateAPIView, RetrieveDestroyAPIView):
     serializer_class = SessionSerializer
     lookup_field = 'id'
 
+    @swagger_auto_schema(responses={
+        200: SessionCreateSuccessful
+    })
     @permission_classes([NotLoggedIn])
     def post(self, request, *args, **kwargs):
         try:
