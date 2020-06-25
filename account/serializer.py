@@ -14,6 +14,12 @@ class SafeUserSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['user_id', 'nickname', 'realname', 'is_seller']
 
 
+class UserEditSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = User
+        fields = ['nickname', 'realname', 'is_seller']
+
+
 class SessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Session
