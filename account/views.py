@@ -65,6 +65,7 @@ class SessionAPI(CreateAPIView, RetrieveDestroyAPIView):
 
     @swagger_auto_schema(operation_summary='세션 생성 (로그인)',
                          operation_description='로그인 정보를 보내서 세션을 생성합니다.',
+                         request_body=LoginRequestBody,
                          responses={
                              200: SessionCreateSuccessful
                          })
