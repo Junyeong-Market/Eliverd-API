@@ -38,6 +38,9 @@ class UserInfoAPI(UpdateModelMixin, DestroyAPIView):
     serializer_class = UserEditSerializer
     permission_classes = [LoggedIn]
 
+    @swagger_auto_schema(operation_summary='사용자 정보 수정',
+                         operation_description='비밀번호, 실명, 닉네임, 판매자 여부를 수정합니다.',
+                         manual_parameters=[AuthorizationHeader])
     def put(self, request, *args, **kwargs):
         if request.account.pid != self.kwargs['pid']:
             return Response(status=status.HTTP_401_UNAUTHORIZED)

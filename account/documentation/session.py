@@ -14,6 +14,27 @@ SessionCreateSuccessful = openapi.Schema(
     }
 )
 
+IDParameter = openapi.Schema(
+    'id',
+    description='유저의 아이디',
+    type=openapi.TYPE_STRING
+)
+
+PWParameter = openapi.Schema(
+    'password',
+    description='유저의 아이디',
+    type=openapi.TYPE_STRING
+)
+
+LoginRequestBody = openapi.Schema(
+    type=openapi.TYPE_OBJECT,
+    required=['user_id', 'password'],
+    properties={
+        'user_id': IDParameter,
+        'password': PWParameter
+    }
+)
+
 AuthorizationHeader = openapi.Parameter(
     'Authorization',
     openapi.IN_HEADER,
