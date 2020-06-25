@@ -47,6 +47,9 @@ class UserInfoAPI(UpdateModelMixin, DestroyAPIView):
 
         return super().update(self, request, *args, **kwargs)
 
+    @swagger_auto_schema(operation_summary='사용자 탈퇴',
+                         operation_description='Eliverd에서 탈퇴합니다.',
+                         manual_parameters=[AuthorizationHeader])
     def delete(self, request, *args, **kwargs):
         if request.account.pid != self.kwargs['pid']:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
