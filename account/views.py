@@ -10,12 +10,13 @@ from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from account.documentation.session import SessionCreateSuccessful, AuthorizationHeader
-from account.documentation.user import UserSearchParameter
+from account.documentation.session import SessionCreateSuccessful, AuthorizationHeader, IDParameter, PWParameter, \
+    LoginRequestBody
+from account.documentation.user import UserSearchParameter, UserDataErrorResponse
 from account.models import Session, User
 from account.pagination import AccountSearchPagination
 from account.permissions import NotLoggedIn, LoggedIn
-from account.serializer import UserSerializer, SessionSerializer, SafeUserSerializer
+from account.serializer import UserSerializer, SessionSerializer, SafeUserSerializer, UserEditSerializer
 from store.models import Store
 
 logger = logging.getLogger(__name__)
@@ -25,6 +26,9 @@ class RegisterAPI(CreateAPIView):
     serializer_class = UserSerializer
     permission_classes = [NotLoggedIn]
 
+    @swagger_auto_schema(operation_summary='사용자 정보 생성 (회원 가입)',
+                         operation_description='새로운 사용자를 생성합니다.',
+                         responses={200: SafeUserSerializer})
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
         return Response(status=response.status_code)
