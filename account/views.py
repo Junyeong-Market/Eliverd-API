@@ -115,6 +115,10 @@ class SessionAPI(CreateAPIView, RetrieveDestroyAPIView):
 class UserDataVerifyAPI(APIView):
     permission_classes = [NotLoggedIn]
 
+    @swagger_auto_schema(operation_summary='사용자 가입 정보 검증',
+                         operation_description='회원가입 정보를 검증합니다.',
+                         request_body=UserSerializer,
+                         responses={200: SafeUserSerializer, 400: UserDataErrorResponse})
     def post(self, request, *args, **kwargs):
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
