@@ -5,7 +5,8 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.decorators import permission_classes
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.generics import CreateAPIView, RetrieveDestroyAPIView, ListAPIView
+from rest_framework.generics import CreateAPIView, RetrieveDestroyAPIView, ListAPIView, DestroyAPIView
+from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -29,23 +30,23 @@ class RegisterAPI(CreateAPIView):
         return Response(status=response.status_code)
 
 
-class UserInfoAPI(APIView):
+class UserInfoAPI(UpdateModelMixin, DestroyAPIView):
+    serializer_class = UserEditSerializer
     permission_classes = [LoggedIn]
 
-    def post(self, request, pid):
-        if request.account.pid != pid:
+    def put(self, request, *args, **kwargs):
+        if request.account.pid != self.kwargs['pid']:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-        serializer = UserSerializer(request.account, data=request.data)
+        return super().update(self, request, *args, **kwargs)
 
-        if serializer.is_valid():
-            serializer.save()
-        return Response({'data': serializer.data})
-
-    def delete(self, request, pid):
-        if request.account.pid != pid:
+    def delete(self, request, *args, **kwargs):
+        if request.account.pid != self.kwargs['pid']:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-        return Response(status=status.HTTP_200_OK)
+        return super().delete(self, request, *args, **kwargs)
+
+    def get_object(self):
+        return self.request.account.model
 
 
 class SessionAPI(CreateAPIView, RetrieveDestroyAPIView):
