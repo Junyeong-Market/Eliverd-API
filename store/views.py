@@ -73,6 +73,11 @@ class StoreStockListAPI(ListAPIView):
     serializer_class = StockSerializer
     pagination_class = StoreStockPagination
 
+    @swagger_auto_schema(operation_summary='재고 목록 조회',
+                         operation_description='상점의 재고 목록을 조회합니다.')
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
     def get_queryset(self):
         return Stock.objects.filter(id=self.kwargs['id'])
 
