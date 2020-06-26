@@ -11,7 +11,7 @@ from product.serializer import ProductSerializer
 from product.views import CreateProductAPI
 from store.models import Store, Stock
 from store.pagination import StoreStockPagination
-from store.serializer import StoreSerializer, StockSerializer, StoreInitSerializer
+from store.serializer import StoreSerializer, StockSerializer, StoreInitSerializer, StockModifySerializer
 
 logger = logging.getLogger(__name__)
 
@@ -114,6 +114,10 @@ class RemoveStockAPI(DestroyAPIView):
 class ModifyStockAPI(UpdateModelMixin, CreateAPIView):
     serializer_class = StockSerializer
 
+    @swagger_auto_schema(operation_summary='상점 재고 수정',
+                         operation_description='상점에 재고를 추가/수정/삭제합니다.',
+                         request_body=StockModifySerializer,
+                         responses={200: StockSerializer})
     def post(self, request, *args, **kwargs):
         try:
             instance = self.get_object()

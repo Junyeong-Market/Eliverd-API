@@ -19,3 +19,9 @@ class StockSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stock
         fields = '__all__'
+
+
+class StockModifySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Stock
+        fields = ['price', 'amount']
