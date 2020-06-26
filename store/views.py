@@ -29,10 +29,6 @@ class RadiusStoreList(ListAPIView):
         point = Point(float(self.request.query_params.get('lat')), float(self.request.query_params.get('lng')))
         return Store.objects.filter(location__distance_lte=(point, float(self.request.query_params.get('distance'))))
 
-    @classmethod
-    def get_extra_actions(cls):
-        return []
-
 
 # class AreaStoreView(ListAPIView):
 #     queryset = Store.objects.filter()
@@ -40,6 +36,7 @@ class RadiusStoreList(ListAPIView):
 #
 #     def get_queryset(self):
 #         return Store.objects.filter()
+
 
 class StoreView(RetrieveAPIView):
     serializer_class = StoreSerializer
