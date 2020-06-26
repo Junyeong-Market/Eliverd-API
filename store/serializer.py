@@ -9,6 +9,12 @@ class StoreSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class StoreInitSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Store
+        fields = ['name', 'description', 'registered_number', 'location']
+
+
 class StockSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stock

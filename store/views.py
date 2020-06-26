@@ -1,6 +1,7 @@
 import logging
 
 from django.contrib.gis.geos import Point
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, DestroyAPIView
 from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
@@ -10,7 +11,7 @@ from product.serializer import ProductSerializer
 from product.views import CreateProductAPI
 from store.models import Store, Stock
 from store.pagination import StoreStockPagination
-from store.serializer import StoreSerializer, StockSerializer
+from store.serializer import StoreSerializer, StockSerializer, StoreInitSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -45,6 +46,10 @@ class StoreView(RetrieveAPIView):
 class CreateStoreAPI(CreateAPIView):
     serializer_class = StoreSerializer
 
+    @swagger_auto_schema(operation_summary='상점 생성',
+                         operation_description='상점을 생성합니다.',
+                         request_body=StoreInitSerializer,
+                         responses={200: StoreSerializer})
     def post(self, request, *args, **kwargs):
         request._full_data = {
             'name': request.data.get('name'),
