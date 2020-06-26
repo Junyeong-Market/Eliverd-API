@@ -85,7 +85,7 @@ class StoreStockListAPI(ListAPIView):
 class AddStockAPI(CreateAPIView):
     serializer_class = StockSerializer
 
-    def create(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         ian = request.data.get('ian', None)
         if request.data.get('name', True):
             response = CreateProductAPI.post(request, *args, **kwargs)
