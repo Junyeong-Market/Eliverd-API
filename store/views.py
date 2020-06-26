@@ -20,6 +20,11 @@ class RadiusStoreList(ListAPIView):
     queryset = Store.objects.filter()
     serializer_class = StoreSerializer
 
+    @swagger_auto_schema(operation_summary='범위 기반 상점 검색',
+                         operation_description='지정된 범위 내의 상점을 가져옵니다.')
+    def get(self, request, *args, **kwargs):
+        super().get(request, *args, **kwargs)
+
     def get_queryset(self):
         point = Point(float(self.request.query_params.get('lat')), float(self.request.query_params.get('lng')))
         return Store.objects.filter(location__distance_lte=(point, float(self.request.query_params.get('distance'))))
