@@ -17,7 +17,7 @@ LoginRequestBody = openapi.Schema(
     }
 )
 
-VerificationError = openapi.Items(
+VerificationError = openapi.Schema(
     type=openapi.TYPE_STRING,
     enum=[
         'user with this {data_name} already exists.',
@@ -26,17 +26,23 @@ VerificationError = openapi.Items(
 )
 
 ErrorArray = openapi.Schema(
+    title='데이터에 대한 오류를 출력합니다.',
     type=openapi.TYPE_ARRAY,
     items=VerificationError
 )
 
-UserDataErrorResponse = openapi.Response(
+UserDataErrorSchema = openapi.Schema(
     type=openapi.TYPE_OBJECT,
-    description='유저 데이터에 오류가 있을 시 오류를 반환합니다.',
     properties={
         'realname': ErrorArray,
         'nickname': ErrorArray,
         'user_id': ErrorArray,
         'password': ErrorArray
     }
+)
+
+UserDataErrorResponse = openapi.Response(
+    type=openapi.TYPE_OBJECT,
+    description='유저 데이터에 오류가 있을 시 오류를 반환합니다.',
+    schema=UserDataErrorSchema
 )
