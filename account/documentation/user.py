@@ -1,6 +1,7 @@
 from drf_yasg import openapi
 
 from account.documentation.session import IDParameter, PWParameter
+from eliverd.docs.errors import ErrorArray
 
 UserSearchParameter = openapi.Parameter(
     'is_seller',
@@ -15,20 +16,6 @@ LoginRequestBody = openapi.Schema(
         'user_id': IDParameter,
         'password': PWParameter
     }
-)
-
-VerificationError = openapi.Schema(
-    type=openapi.TYPE_STRING,
-    enum=[
-        'user with this {data_name} already exists.',
-        'Ensure this field has {data_error}'
-    ]
-)
-
-ErrorArray = openapi.Schema(
-    title='데이터에 대한 오류를 출력합니다.',
-    type=openapi.TYPE_ARRAY,
-    items=VerificationError
 )
 
 UserDataErrorSchema = openapi.Schema(
