@@ -4,8 +4,6 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-# RUN add-apt-repository ppa:ubuntugis/ppa
-
 RUN apt-get update
 
 RUN apt-get install -y gdal-bin
