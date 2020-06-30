@@ -8,7 +8,7 @@ RUN apt-get update
 
 RUN apt-get install -y gdal-bin
 
-RUN apt-get install -y libmariadb-dev python3-pip build-essential
+RUN apt-get install -y libmariadb-dev build-essential
 RUN pip3 install -r requirements.txt
 
 EXPOSE 8000
