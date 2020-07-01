@@ -18,6 +18,7 @@ class StoreInitSerializer(serializers.ModelSerializer):
 class StockSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stock
+        depth = 1
         fields = '__all__'
 
 
