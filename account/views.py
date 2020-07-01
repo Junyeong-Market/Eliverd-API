@@ -5,13 +5,11 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.decorators import permission_classes
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.generics import CreateAPIView, RetrieveDestroyAPIView, ListAPIView, DestroyAPIView
-from rest_framework.mixins import UpdateModelMixin
+from rest_framework.generics import CreateAPIView, RetrieveDestroyAPIView, ListAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from account.documentation.session import SessionCreateSuccessful, AuthorizationHeader, IDParameter, PWParameter, \
-    LoginRequestBody
+from account.documentation.session import SessionCreateSuccessful, AuthorizationHeader, LoginRequestBody
 from account.documentation.user import UserSearchParameter, UserDataErrorResponse
 from account.models import Session, User
 from account.pagination import AccountSearchPagination
@@ -34,22 +32,26 @@ class RegisterAPI(CreateAPIView):
         return Response(status=response.status_code)
 
 
-class UserInfoAPI(UpdateModelMixin, DestroyAPIView):
+class UserInfoAPI(RetrieveUpdateDestroyAPIView):
     serializer_class = UserEditSerializer
-    permission_classes = [LoggedIn]
+
+    @swagger_auto_schema(operation_summary='사용자 정보 조회', operation_description='사용자의 정보를 가져옵니다.')
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
     @swagger_auto_schema(operation_summary='사용자 정보 수정',
                          operation_description='비밀번호, 실명, 닉네임, 판매자 여부를 수정합니다.',
                          manual_parameters=[AuthorizationHeader])
+    @permission_classes([LoggedIn])
     def put(self, request, *args, **kwargs):
         if request.account.pid != self.kwargs['pid']:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-
-        return super().update(self, request, *args, **kwargs)
+        return super().put(self, request, *args, **kwargs)
 
     @swagger_auto_schema(operation_summary='사용자 정보 수정',
                          operation_description='비밀번호, 실명, 닉네임, 판매자 여부를 수정합니다.',
                          manual_parameters=[AuthorizationHeader])
+    @permission_classes([LoggedIn])
     def patch(self, request, *args, **kwargs):
         if request.account.pid != self.kwargs['pid']:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
@@ -58,13 +60,21 @@ class UserInfoAPI(UpdateModelMixin, DestroyAPIView):
     @swagger_auto_schema(operation_summary='사용자 탈퇴',
                          operation_description='Eliverd에서 탈퇴합니다.',
                          manual_parameters=[AuthorizationHeader])
+    @permission_classes([LoggedIn])
     def delete(self, request, *args, **kwargs):
         if request.account.pid != self.kwargs['pid']:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         return super().delete(self, request, *args, **kwargs)
 
     def get_object(self):
+        if self.request.method == 'GET':
+            return User.objects.filter(user_id=self.kwargs['pid'])
         return self.request.account.model
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return SafeUserSerializer
+        return UserEditSerializer
 
 
 class SessionAPI(CreateAPIView, RetrieveDestroyAPIView):
