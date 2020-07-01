@@ -11,7 +11,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class SafeUserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'user_id', 'nickname', 'realname', 'is_seller']
+        fields = ['pid', 'user_id', 'nickname', 'realname', 'is_seller']
 
 
 class UserEditSerializer(serializers.HyperlinkedModelSerializer):
