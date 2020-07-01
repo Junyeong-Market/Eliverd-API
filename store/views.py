@@ -6,9 +6,12 @@ from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView,
 from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
 
+from account.documentation.session import AuthorizationHeader
 from product.models import Product
 from product.serializer import ProductSerializer
 from product.views import CreateProductAPI
+from store.documentation import StoreNameParameter, StoreDescriptionParameter, StoreRegisteredNumberParameter, \
+    StoreLatParameter, StoreLngParameter, StoreInitBody
 from store.models import Store, Stock
 from store.pagination import StoreStockPagination
 from store.serializer import StoreSerializer, StockSerializer, StoreInitSerializer, StockModifySerializer
@@ -55,7 +58,8 @@ class CreateStoreAPI(CreateAPIView):
 
     @swagger_auto_schema(operation_summary='상점 생성',
                          operation_description='상점을 생성합니다.',
-                         request_body=StoreInitSerializer,
+                         request_body=StoreInitBody,
+                         manual_parameters=[AuthorizationHeader],
                          responses={200: StoreSerializer})
     def post(self, request, *args, **kwargs):
         request._full_data = {
