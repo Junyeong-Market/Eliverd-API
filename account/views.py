@@ -47,6 +47,14 @@ class UserInfoAPI(UpdateModelMixin, DestroyAPIView):
 
         return super().update(self, request, *args, **kwargs)
 
+    @swagger_auto_schema(operation_summary='사용자 정보 수정',
+                         operation_description='비밀번호, 실명, 닉네임, 판매자 여부를 수정합니다.',
+                         manual_parameters=[AuthorizationHeader])
+    def patch(self, request, *args, **kwargs):
+        if request.account.pid != self.kwargs['pid']:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
     @swagger_auto_schema(operation_summary='사용자 탈퇴',
                          operation_description='Eliverd에서 탈퇴합니다.',
                          manual_parameters=[AuthorizationHeader])
