@@ -7,6 +7,7 @@ from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
 
 from account.documentation.session import AuthorizationHeader
+from account.permissions import LoggedIn
 from product.models import Product
 from product.serializer import ProductSerializer
 from product.views import CreateProductAPI
@@ -55,6 +56,7 @@ class StoreView(RetrieveAPIView):
 
 class CreateStoreAPI(CreateAPIView):
     serializer_class = StoreSerializer
+    permission_classes = [LoggedIn]
 
     @swagger_auto_schema(operation_summary='상점 생성',
                          operation_description='상점을 생성합니다.',
