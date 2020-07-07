@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 class NotLoggedIn(BasePermission):
     def has_permission(self, request, view):
-        return isinstance(request.account, AnonymousUser)
+        return request.account is AnonymousUser
 
 
 class LoggedIn(BasePermission):
