@@ -1,9 +1,11 @@
 from rest_framework import serializers
 
+from account.serializer import SafeUserSerializer
 from store.models import Store, Stock
 
 
 class StoreSerializer(serializers.ModelSerializer):
+    registerer = SafeUserSerializer(many=True)
     class Meta:
         model = Store
         depth = 1
@@ -11,6 +13,7 @@ class StoreSerializer(serializers.ModelSerializer):
 
 
 class FlatStoreSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Store
         fields = '__all__'
