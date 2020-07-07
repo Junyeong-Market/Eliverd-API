@@ -24,6 +24,19 @@ class CreateOrderAPI(CreateAPIView):
         :param kwargs:
         :return:
         '''
+
+        stocks = request.data.get['stock']
+        serializers = []
+        for stock in stocks:
+            serializer = OrderedStockSerializer(data={
+                'stock': stock.id,
+                'amount': stock.amount
+            })
+            serializer.is_valid(raise_exception=True)
+            serializers.append(serializer)
+        for serializer in serializers:
+            serializer.save()
+        stocks = [serializer.instance.id for serializer in serializers]
         # OrderedStock 생성
 
         res = super().post(request, *args, **kwargs)  # Order 생성
