@@ -16,9 +16,5 @@ class AuthorizationMiddleware(MiddlewareMixin):
             session = Session.objects.get(id=request.headers.get('Authorization', -1), expireAt__gte=datetime.now())
             request.account = NormalUser(session.pid)
         except Session.DoesNotExist:
-
             request.account = AnonymousUser
-
-        response = self.get_response(request)
-
-        return response
+        return self.get_response(request)
