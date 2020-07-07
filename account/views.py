@@ -16,6 +16,7 @@ from account.pagination import AccountSearchPagination
 from account.permissions import NotLoggedIn, LoggedIn
 from account.serializer import UserSerializer, SessionSerializer, SafeUserSerializer, UserEditSerializer
 from store.models import Store
+from store.serializer import StoreSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -157,3 +158,15 @@ class UserSearchAPI(ListAPIView):
         if is_seller:
             return User.objects.filter(realname__contains=self.kwargs['name'], is_seller=is_seller)
         return User.objects.filter(realname__contains=self.kwargs['name'])
+
+
+class UserOwnedStoreAPI(ListAPIView):
+    serializer_class = StoreSerializer
+    pagination_class = AccountSearchPagination
+
+    @swagger_auto_schema(operation_summary='권한 있는 상점 조회', operation_description='유저가 권한이 있는 상점 목록을 가져옵니다.')
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return Store.objects.filter(registerer__password__contains=self.kwargs['pid'])

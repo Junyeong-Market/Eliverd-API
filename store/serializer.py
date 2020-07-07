@@ -6,6 +6,7 @@ from store.models import Store, Stock
 class StoreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Store
+        depth = 1
         fields = '__all__'
 
 
