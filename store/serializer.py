@@ -6,6 +6,7 @@ from store.models import Store, Stock
 
 class StoreSerializer(serializers.ModelSerializer):
     registerer = SafeUserSerializer(many=True)
+
     class Meta:
         model = Store
         depth = 1
