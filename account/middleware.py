@@ -13,7 +13,7 @@ class AuthorizationMiddleware(MiddlewareMixin):
 
     def process_request(self, request):
         try:
-            session = Session.objects.get(id=request.headers.get('Authorization', -1), expireAt__gte=datetime.now())
+            session = Session.objects.get(id=request.headers.get('Authorization', 0), expireAt__gte=datetime.now())
             request.account = NormalUser(session.pid)
         except Session.DoesNotExist:
             request.account = AnonymousUser
