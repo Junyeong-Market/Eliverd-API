@@ -73,7 +73,7 @@ class CreateStoreAPI(CreateAPIView):
             'name': request.data.get('name'),
             'description': request.data.get('description'),
             'registerer': registerers,
-            'registerer_number': request.data.get('registered_number', ''),
+            'registered_number': request.data.get('registered_number', ''),
             'location': Point(float(request.data.get('lat')), float(request.data.get('lng')))
         }
         return super().post(request, *args, **kwargs)
