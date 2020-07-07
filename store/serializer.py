@@ -10,6 +10,12 @@ class StoreSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class FlatStoreSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Store
+        fields = '__all__'
+
+
 class StoreInitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Store

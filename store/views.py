@@ -1,3 +1,4 @@
+import json
 import logging
 
 from django.contrib.gis.geos import Point
@@ -15,7 +16,8 @@ from store.documentation import StoreNameParameter, StoreDescriptionParameter, S
     StoreLatParameter, StoreLngParameter, StoreInitBody
 from store.models import Store, Stock
 from store.pagination import StoreStockPagination
-from store.serializer import StoreSerializer, StockSerializer, StoreInitSerializer, StockModifySerializer
+from store.serializer import StoreSerializer, StockSerializer, StoreInitSerializer, StockModifySerializer, \
+    FlatStoreSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -55,7 +57,7 @@ class StoreView(RetrieveAPIView):
 
 
 class CreateStoreAPI(CreateAPIView):
-    serializer_class = StoreSerializer
+    serializer_class = FlatStoreSerializer
     permission_classes = [LoggedIn]
 
     @swagger_auto_schema(operation_summary='상점 생성',
@@ -64,11 +66,14 @@ class CreateStoreAPI(CreateAPIView):
                          manual_parameters=[AuthorizationHeader],
                          responses={200: StoreSerializer})
     def post(self, request, *args, **kwargs):
+        registerers = request.data.get('registerer')
+        if isinstance(registerers, str):
+            registerers = json.loads(registerers)
         request._full_data = {
             'name': request.data.get('name'),
             'description': request.data.get('description'),
-            'registerer': [request.account.pid],
-            'registerer_number': request.data.get('registerer_number') or '',
+            'registerer': registerers,
+            'registerer_number': request.data.get('registered_number', ''),
             'location': Point(float(request.data.get('lat')), float(request.data.get('lng')))
         }
         return super().post(request, *args, **kwargs)
