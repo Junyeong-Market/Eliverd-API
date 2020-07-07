@@ -5,10 +5,12 @@ import requests
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 
-from purchase.serializer import OrderedStockSerializer
+from purchase.serializer import OrderedStockSerializer, OrderSerializer
 
 
 class CreateOrderAPI(CreateAPIView):
+    serializer_class = OrderSerializer
+
     def post(self, request, *args, **kwargs):
         '''
 
@@ -25,7 +27,7 @@ class CreateOrderAPI(CreateAPIView):
         :return:
         '''
 
-        stocks = request.data.get['stock']
+        stocks = request.data.get('stock')
         serializers = []
         for stock in stocks:
             serializer = OrderedStockSerializer(data={
@@ -38,6 +40,11 @@ class CreateOrderAPI(CreateAPIView):
             serializer.save()
         stocks = [serializer.instance.id for serializer in serializers]
         # OrderedStock 생성
+
+        request._full_body = {
+            'store': request.data.get('store'),
+            'stock': stocks
+        }
 
         res = super().post(request, *args, **kwargs)  # Order 생성
 
