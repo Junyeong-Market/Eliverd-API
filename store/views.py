@@ -64,7 +64,7 @@ class CreateStoreAPI(CreateAPIView):
                          operation_description='상점을 생성합니다.',
                          request_body=StoreInitBody,
                          manual_parameters=[AuthorizationHeader],
-                         responses={200: StoreSerializer})
+                         responses={200: FlatStoreSerializer})
     def post(self, request, *args, **kwargs):
         registerers = request.data.get('registerer')
         if isinstance(registerers, str):
