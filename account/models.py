@@ -36,6 +36,6 @@ class Session(models.Model):
     def __str__(self):
         return str(self.id)
 
-    id = models.CharField(max_length=100, unique=True, primary_key=True, default=uuid.uuid4())
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     pid = models.ForeignKey(User, on_delete=models.CASCADE)
     expireAt = models.DateTimeField()
