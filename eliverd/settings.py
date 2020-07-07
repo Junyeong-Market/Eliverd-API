@@ -30,6 +30,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'localhost',
+    '127.0.0.1',
     'donote.co',
     '54.180.21.237',
     'eliverd.startergate.dev'
