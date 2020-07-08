@@ -1,9 +1,15 @@
+import logging
+
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.generics import RetrieveAPIView, get_object_or_404, CreateAPIView, ListAPIView
 
+from account.documentation.session import AuthorizationHeader
+from account.permissions import LoggedIn
 from product.models import Product, Manufacturer
 from product.pagination import ManufacturerSearchPagination
 from product.serializer import ProductSerializer, ManufacturerSerializer
+
+logger = logging.getLogger(__name__)
 
 
 class GetProductAPI(RetrieveAPIView):
@@ -20,8 +26,18 @@ class GetProductAPI(RetrieveAPIView):
 
 
 class CreateProductAPI(CreateAPIView):
-    queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+
+class CreateManufacturerAPI(CreateAPIView):
+    serializer_class = ManufacturerSerializer
+    permission_classes = [LoggedIn]
+
+    @swagger_auto_schema(operation_summary='제조사 생성',
+                         operation_description='제조사를 생성합니다.',
+                         manual_parameters=[AuthorizationHeader])
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
 
 
 class SearchManufacturerAPI(ListAPIView):
