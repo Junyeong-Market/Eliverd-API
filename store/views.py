@@ -132,11 +132,10 @@ class ModifyStockAPI(UpdateModelMixin, CreateAPIView):
     def post(self, request, *args, **kwargs):
         try:
             instance = self.get_object()
-            serializer = StockSerializer(instance,
-                                         data={
-                                             'price': request.data.get('price', instance.price),
-                                             'amount': instance.amount + request.data.get('amount', 0)
-                                         }, partial=True)
+            serializer = FlatStockSerializer(instance, data={
+                'price': int(request.data.get('price', instance.price)),
+                'amount': instance.amount + int(request.data.get('amount', 0))
+            }, partial=True)
             serializer.is_valid(raise_exception=True)
             self.perform_update(serializer)
             return Response(serializer.data)
