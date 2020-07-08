@@ -17,7 +17,7 @@ from store.documentation import StoreNameParameter, StoreDescriptionParameter, S
 from store.models import Store, Stock
 from store.pagination import StoreStockPagination
 from store.serializer import StoreSerializer, StockSerializer, StoreInitSerializer, StockModifySerializer, \
-    FlatStoreSerializer
+    FlatStoreSerializer, FlatStockSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -123,7 +123,7 @@ class RemoveStockAPI(DestroyAPIView):
 
 
 class ModifyStockAPI(UpdateModelMixin, CreateAPIView):
-    serializer_class = StockSerializer
+    serializer_class = FlatStockSerializer
 
     @swagger_auto_schema(operation_summary='상점 재고 수정',
                          operation_description='상점에 재고를 추가/수정/삭제합니다.',
