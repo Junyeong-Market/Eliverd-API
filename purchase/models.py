@@ -29,7 +29,7 @@ class Order(models.Model):
 
     oid = models.AutoField(primary_key=True)
     tid = models.CharField(max_length=20, unique=True, null=True)
-    store = models.ForeignKey(Store, models.CASCADE)
+    store = models.ForeignKey(Store, on_delete=models.CASCADE, null=True)
     stocks = models.ManyToManyField(OrderedStock)
     status = models.CharField(choices=OrderStatus.choices, max_length=16, default=OrderStatus.PENDING)
     total = models.PositiveIntegerField(null=True)
