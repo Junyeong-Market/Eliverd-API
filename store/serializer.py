@@ -33,6 +33,13 @@ class StockSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class GetStockSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Stock
+        depth = 2
+        exclude = ['store']
+
+
 class FlatStockSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stock

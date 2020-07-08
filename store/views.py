@@ -17,7 +17,7 @@ from store.documentation import StoreNameParameter, StoreDescriptionParameter, S
 from store.models import Store, Stock
 from store.pagination import StoreStockPagination
 from store.serializer import StoreSerializer, StockSerializer, StoreInitSerializer, StockModifySerializer, \
-    FlatStoreSerializer, FlatStockSerializer
+    FlatStoreSerializer, FlatStockSerializer, GetStockSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -81,7 +81,7 @@ class CreateStoreAPI(CreateAPIView):
 
 class StoreStockListAPI(ListAPIView):
     queryset = Stock.objects.filter()
-    serializer_class = StockSerializer
+    serializer_class = GetStockSerializer
     pagination_class = StoreStockPagination
 
     @swagger_auto_schema(operation_summary='재고 목록 조회',
@@ -90,7 +90,7 @@ class StoreStockListAPI(ListAPIView):
         return super().get(request, *args, **kwargs)
 
     def get_queryset(self):
-        return Stock.objects.filter(id=self.kwargs['id'])
+        return Stock.objects.filter(store__id=self.kwargs['id'])
 
 
 class AddStockAPI(CreateAPIView):
@@ -128,7 +128,7 @@ class ModifyStockAPI(UpdateModelMixin, CreateAPIView):
     @swagger_auto_schema(operation_summary='상점 재고 수정',
                          operation_description='상점에 재고를 추가/수정/삭제합니다.',
                          request_body=StockModifySerializer,
-                         responses={200: StockSerializer})
+                         responses={200: FlatStockSerializer})
     def post(self, request, *args, **kwargs):
         try:
             instance = self.get_object()
