@@ -3,6 +3,7 @@ import logging
 
 from django.contrib.gis.geos import Point
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework import status
 from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, DestroyAPIView
 from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
@@ -64,7 +65,7 @@ class CreateStoreAPI(CreateAPIView):
                          operation_description='상점을 생성합니다.',
                          request_body=StoreInitBody,
                          manual_parameters=[AuthorizationHeader],
-                         responses={200: FlatStoreSerializer})
+                         responses={200: StoreSerializer})
     def post(self, request, *args, **kwargs):
         registerers = request.data.get('registerer')
         if isinstance(registerers, str):
@@ -76,7 +77,12 @@ class CreateStoreAPI(CreateAPIView):
             'registered_number': request.data.get('registered_number', ''),
             'location': Point(float(request.data.get('lat')), float(request.data.get('lng')))
         }
-        return super().post(request, *args, **kwargs)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        serializer = StoreSerializer(serializer.instance)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class StoreStockListAPI(ListAPIView):
