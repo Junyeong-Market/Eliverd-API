@@ -157,10 +157,11 @@ class ModifyStockAPI(UpdateModelMixin, CreateAPIView):
         return super().post(request, *args, **kwargs)
 
     def get_queryset(self):
-        return Stock.objects.filter(store=self.kwargs['id'], product=self.request.data.get('ian', -1))
+        return Stock.objects.filter(store__id=int(self.kwargs['id']),
+                                    product__ian=self.request.data.get('ian', -1))
 
     def get_object(self):
-        return Stock.objects.get(store=int(self.kwargs['id']),
+        return Stock.objects.get(store__id=int(self.kwargs['id']),
                                  product=Product.objects.get(ian=self.request.data.get('ian', 'notexist')))
 
 

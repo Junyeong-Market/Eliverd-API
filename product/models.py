@@ -15,5 +15,5 @@ class Product(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=128, null=False)
     manufacturer = models.ForeignKey(Manufacturer, models.CASCADE)
-    ian = models.CharField(max_length=36, default=uuid.uuid4())  # International Article Number == 바코드
+    ian = models.CharField(max_length=36, default=uuid.uuid4)  # International Article Number == 바코드
 
