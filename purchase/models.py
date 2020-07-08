@@ -25,7 +25,7 @@ class OrderedStock(models.Model):
 class Order(models.Model):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.total = self.stocks.aggregate(Sum('stock__price'))
+        self.total = self.stocks.aggregate(Sum('stock__price'))['stock__price__sum']
 
     oid = models.AutoField(primary_key=True)
     tid = models.CharField(max_length=20, unique=True, null=True)
