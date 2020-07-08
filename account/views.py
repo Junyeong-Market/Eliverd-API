@@ -27,7 +27,7 @@ class RegisterAPI(CreateAPIView):
 
     @swagger_auto_schema(operation_summary='사용자 정보 생성 (회원 가입)',
                          operation_description='새로운 사용자를 생성합니다.',
-                         responses={200: SafeUserSerializer})
+                         responses={201: 'Created'})
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
         return Response(status=response.status_code)
