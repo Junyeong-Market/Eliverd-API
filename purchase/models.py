@@ -22,6 +22,6 @@ class OrderedStock(models.Model):
 
 class Order(models.Model):
     oid = models.AutoField(primary_key=True)
-    tid = models.CharField(max_length=20, unique=True)
+    tid = models.CharField(max_length=20, unique=True, null=True)
     stocks = models.ManyToManyField(OrderedStock)
     status = models.CharField(choices=OrderStatus.choices, max_length=16, default=OrderStatus.PENDING)
