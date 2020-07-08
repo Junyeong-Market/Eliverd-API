@@ -1,3 +1,4 @@
+import json
 import os
 
 import requests
@@ -5,11 +6,13 @@ import requests
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 
+from account.permissions import LoggedIn
 from purchase.serializer import OrderedStockSerializer, OrderSerializer
 
 
 class CreateOrderAPI(CreateAPIView):
     serializer_class = OrderSerializer
+    permission_classes = [LoggedIn]
 
     def post(self, request, *args, **kwargs):
         '''
@@ -46,19 +49,23 @@ class CreateOrderAPI(CreateAPIView):
             'stock': stocks
         }
 
-        res = super().post(request, *args, **kwargs)  # Order 생성
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        # Order 생성
 
-        oid = res.data['oid']
+        instance = serializer.instance
+        oid = instance.oid
         response = requests.post('https://kapi.kakao.com/v1/payment/ready',
                                  data={
                                      'cid': os.getenv('KAKAOPAY_CID'),
                                      'partner_order_id': oid,
                                      'partner_user_id': request.account.pid,
-                                     'item_name': 'some name',
+                                     'item_name': instance.store.name,
                                      'quantity': 1,
-                                     'total_amount': 0,
-                                     'vat_amount': 'total_amount / 11',
-                                     'tax_free_amount': 0,
+                                     'total_amount': instance.total,
+                                     'vat_amount': instance.total / 11,
+                                     'tax_free_amount': instance.total - instance.total / 11,
                                      'approval_url': f"/purchase/{oid}/success/",
                                      'fail_url': f"/purchase/{oid}/fail/",
                                      'cancel_url': f"/purchase/{oid}/cancel/"
@@ -67,6 +74,11 @@ class CreateOrderAPI(CreateAPIView):
                                      'Authorization': f"KakaoAK {os.getenv('KAKAO_ADMIN')}"
                                  })
 
-        # response tid로 Order 업데이트
+        response = json.loads(response.text)
+        response['oid'] = oid
 
-        return Response(response.text)
+        # response tid로 Order 업데이트
+        serializer = self.get_serializer(instance, data=response, partial=True)
+        serializer.save()
+
+        return Response(response, status=201)

@@ -1,7 +1,9 @@
 from django.db import models
 
 # Create your models here.
-from store.models import Stock
+from django.db.models import Sum
+
+from store.models import Stock, Store
 
 
 class OrderStatus(models.TextChoices):
@@ -21,7 +23,13 @@ class OrderedStock(models.Model):
 
 
 class Order(models.Model):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.total = self.stocks.aggregate(Sum('stock__price'))
+
     oid = models.AutoField(primary_key=True)
     tid = models.CharField(max_length=20, unique=True, null=True)
+    store = models.ForeignKey(Store, models.CASCADE)
     stocks = models.ManyToManyField(OrderedStock)
     status = models.CharField(choices=OrderStatus.choices, max_length=16, default=OrderStatus.PENDING)
+    total = models.PositiveIntegerField(null=True)
