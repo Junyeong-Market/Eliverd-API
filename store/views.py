@@ -90,7 +90,7 @@ class StoreStockListAPI(ListAPIView):
         return super().get(request, *args, **kwargs)
 
     def get_queryset(self):
-        return Stock.objects.filter(store__id=self.kwargs['id'])
+        return Stock.objects.filter(store__id=self.kwargs['id'], amount__gt=0)
 
 
 class AddStockAPI(CreateAPIView):
