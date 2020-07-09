@@ -3,14 +3,22 @@ from django.db import models
 # Create your models here.
 from django.db.models import Sum
 
+from account.models import User
 from store.models import Stock, Store
 
 
+class TransactionStatus(models.TextChoices):
+    PENDING = 'pending'
+    PROCESSED = 'processed'
+    CANCELED = 'canceled'
+    FAILED = 'failed'
+
+
 class OrderStatus(models.TextChoices):
-    PENDING = "pending"
-    PROCESSED = "processed"
-    CANCELED = "canceled"
-    FAILED = "failed"
+    PENDING = 'pending'
+    READY = 'ready'
+    DELIVERING = 'delivering'
+    DELIVERED = 'delivered'
 
 
 class OrderedStock(models.Model):
@@ -22,14 +30,22 @@ class OrderedStock(models.Model):
     amount = models.PositiveIntegerField()
 
 
+class PartialOrder(models.Model):
+
+    poid = models.AutoField(primary_key=True)
+    store = models.ForeignKey(Store, on_delete=models.CASCADE, null=True)
+    status = models.CharField(choices=OrderStatus.choices, max_length=16, default=OrderStatus.PENDING)
+    stocks = models.ManyToManyField(OrderedStock)
+
+
 class Order(models.Model):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.total = self.stocks.aggregate(Sum('stock__price'))['stock__price__sum']
+        self.total = self.partials.aggregate(Sum('stocks__stock__price'))['stocks__stock__price__sum']
 
     oid = models.AutoField(primary_key=True)
     tid = models.CharField(max_length=20, unique=True, null=True)
-    store = models.ForeignKey(Store, on_delete=models.CASCADE, null=True)
-    stocks = models.ManyToManyField(OrderedStock)
-    status = models.CharField(choices=OrderStatus.choices, max_length=16, default=OrderStatus.PENDING)
+    customer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    partials = models.ManyToManyField(PartialOrder)
+    status = models.CharField(choices=TransactionStatus.choices, max_length=16, default=TransactionStatus.PENDING)
     total = models.PositiveIntegerField(null=True)
