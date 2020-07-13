@@ -2,6 +2,7 @@ import json
 import logging
 
 from django.contrib.gis.geos import Point
+from django.core.exceptions import SuspiciousOperation
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, DestroyAPIView
@@ -33,8 +34,11 @@ class RadiusStoreList(ListAPIView):
         return super().get(request, *args, **kwargs)
 
     def get_queryset(self):
-        point = Point(float(self.request.query_params.get('lat')), float(self.request.query_params.get('lng')))
-        return Store.objects.filter(location__distance_lte=(point, float(self.request.query_params.get('distance'))))
+        try:
+            point = Point(float(self.request.query_params.get('lat')), float(self.request.query_params.get('lng')))
+            return Store.objects.filter(location__distance_lte=(point, float(self.request.query_params.get('distance', 0))))
+        except TypeError:
+            raise SuspiciousOperation('Bad Request')
 
 
 # class AreaStoreView(ListAPIView):
