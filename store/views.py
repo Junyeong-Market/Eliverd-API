@@ -15,7 +15,7 @@ from product.models import Product
 from product.serializer import ProductSerializer
 from product.views import CreateProductAPI
 from store.documentation import StoreNameParameter, StoreDescriptionParameter, StoreRegisteredNumberParameter, \
-    StoreLatParameter, StoreLngParameter, StoreInitBody
+    StoreLatParameter, StoreLngParameter, StoreInitBody, Lat, Lng, Distance
 from store.models import Store, Stock
 from store.pagination import StoreStockPagination
 from store.serializer import StoreSerializer, StockSerializer, StoreInitSerializer, StockModifySerializer, \
@@ -29,7 +29,8 @@ class RadiusStoreList(ListAPIView):
     serializer_class = StoreSerializer
 
     @swagger_auto_schema(operation_summary='범위 기반 상점 검색',
-                         operation_description='지정된 범위 내의 상점을 가져옵니다.')
+                         operation_description='지정된 범위 내의 상점을 가져옵니다.',
+                         manual_parameters=[Lat, Lng, Distance])
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 

@@ -36,3 +36,24 @@ StoreInitBody = openapi.Schema(
         'lng': StoreLngParameter,
     }
 )
+
+Lat = openapi.Parameter(
+    'lat',
+    openapi.IN_QUERY,
+    description='상점 위치 정보',
+    type=openapi.TYPE_NUMBER
+)
+
+Lng = openapi.Parameter(
+    'lng',
+    openapi.IN_QUERY,
+    description='상점 위치 정보',
+    type=openapi.TYPE_NUMBER
+)
+
+Distance = openapi.Parameter(
+    'distance',
+    openapi.IN_QUERY,
+    description='검색 범위',
+    type=openapi.TYPE_NUMBER
+)
