@@ -8,6 +8,24 @@ class Manufacturer(models.Model):
     name = models.CharField(max_length=128)
 
 
+class Category(models.TextChoices):
+    FASHION = 'fashion'
+    BEAUTY = 'beauty'
+    BABY = 'baby'
+    FOOD = 'food'
+    KITCHEN = 'kitchen'
+    LIVING = 'living'
+    FURNITURE = 'furniture'
+    DIGITAL = 'digital'
+    LEISURE = 'leisure'
+    CAR = 'car'
+    PUBLICATION = 'publication'
+    TOY = 'toy'
+    OFFICE = 'office'
+    PET = 'pet'
+    HEALTH = 'health'
+
+
 class Product(models.Model):
     def __str__(self):
         return self.name
