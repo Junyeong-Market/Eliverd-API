@@ -7,7 +7,7 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 
 from account.permissions import LoggedIn
-from purchase.serializer import OrderedStockSerializer, OrderSerializer
+from purchase.serializer import OrderedStockSerializer, OrderSerializer, PartialOrderSerializer
 
 
 class CreateOrderAPI(CreateAPIView):
@@ -29,30 +29,41 @@ class CreateOrderAPI(CreateAPIView):
         :param kwargs:
         :return:
         '''
+        orders = []
+        for order in request.data:
+            stocks = request.data.get('stock')
+            serializers = []
+            for stock in stocks:
+                serializer = OrderedStockSerializer(data={
+                    'stock': stock.id,
+                    'amount': stock.amount
+                })
+                serializer.is_valid(raise_exception=True)
+                serializers.append(serializer)
+            for serializer in serializers:
+                serializer.save()
+            stocks = [serializer.instance.id for serializer in serializers]
+            # OrderedStock 생성
 
-        stocks = request.data.get('stock')
-        serializers = []
-        for stock in stocks:
-            serializer = OrderedStockSerializer(data={
-                'stock': stock.id,
-                'amount': stock.amount
+            serializer = PartialOrderSerializer(data={
+                'store': request.data.get('store'),
+                'stock': stocks
             })
             serializer.is_valid(raise_exception=True)
-            serializers.append(serializer)
-        for serializer in serializers:
-            serializer.save()
-        stocks = [serializer.instance.id for serializer in serializers]
+            orders.append(serializer)
+        for order in orders:
+            order.save()
+        orders = [serializer.instance.poid for serializer in orders]
         # OrderedStock 생성
 
         request._full_body = {
-            'store': request.data.get('store'),
-            'stock': stocks
+            'customer': request.account.pid,
+            'partials': orders,
         }
 
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        # Order 생성
 
         instance = serializer.instance
         oid = instance.oid
