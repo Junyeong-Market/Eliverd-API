@@ -13,3 +13,10 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = '__all__'
+
+
+class DeepOrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        depth = 3
+        fields = '__all__'

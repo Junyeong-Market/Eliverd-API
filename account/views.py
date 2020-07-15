@@ -15,6 +15,8 @@ from account.models import Session, User
 from account.pagination import AccountSearchPagination
 from account.permissions import NotLoggedIn, LoggedIn
 from account.serializer import UserSerializer, SessionSerializer, SafeUserSerializer, UserEditSerializer
+from purchase.models import Order
+from purchase.serializer import OrderSerializer, DeepOrderSerializer
 from store.models import Store
 from store.serializer import StoreSerializer
 
@@ -170,3 +172,15 @@ class UserOwnedStoreAPI(ListAPIView):
 
     def get_queryset(self):
         return Store.objects.filter(registerer__password__contains=self.kwargs['pid'])
+
+
+class UserOrderAPI(ListAPIView):
+    serializer_class = DeepOrderSerializer
+    pagination_class = AccountSearchPagination
+
+    @swagger_auto_schema(operation_summary='유저 주문 내역 조회', operation_description='유저의 주문 내역을 가져옵니다.')
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return Order.objects.filter(customer__pid=self.kwargs['pid'])
