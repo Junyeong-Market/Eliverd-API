@@ -10,10 +10,13 @@ from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
 
 from account.documentation.session import AuthorizationHeader
+from account.pagination import AccountSearchPagination
 from account.permissions import LoggedIn
 from product.models import Product
 from product.serializer import ProductSerializer
 from product.views import CreateProductAPI
+from purchase.models import PartialOrder
+from purchase.serializer import DeepOrderSerializer
 from store.documentation import StoreNameParameter, StoreDescriptionParameter, StoreRegisteredNumberParameter, \
     StoreLatParameter, StoreLngParameter, StoreInitBody, Lat, Lng, Distance
 from store.models import Store, Stock
@@ -175,3 +178,14 @@ class ModifyStockAPI(UpdateModelMixin, CreateAPIView):
                                  product=Product.objects.get(ian=self.request.data.get('ian', 'notexist')))
 
 
+class StoreOrderAPI(ListAPIView):
+    serializer_class = DeepOrderSerializer
+    pagination_class = AccountSearchPagination
+
+    @swagger_auto_schema(operation_summary='상점 별 주문 내역 조회',
+                         operation_description='각 상점이 처리해야 하는 주문 내역을 가져옵니다.')
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return PartialOrder.objects.filter(store__id=self.kwargs['id'])
