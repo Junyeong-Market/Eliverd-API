@@ -1,11 +1,17 @@
 from rest_framework import serializers
 
-from purchase.models import OrderedStock, Order
+from purchase.models import OrderedStock, Order, PartialOrder
 
 
 class OrderedStockSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderedStock
+        fields = '__all__'
+
+
+class PartialOrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PartialOrder
         fields = '__all__'
 
 
