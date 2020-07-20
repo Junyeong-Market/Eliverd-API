@@ -19,6 +19,7 @@ class OrderStatus(models.TextChoices):
     READY = 'ready'
     DELIVERING = 'delivering'
     DELIVERED = 'delivered'
+    CANCELED = 'canceled'
     DONE = 'done'
 
 
