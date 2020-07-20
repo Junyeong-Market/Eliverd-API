@@ -19,6 +19,13 @@ class OrderStatus(models.TextChoices):
     READY = 'ready'
     DELIVERING = 'delivering'
     DELIVERED = 'delivered'
+    DONE = 'done'
+
+
+class StockAppliedStatus(models.IntegerChoices):
+    PREPARED = 0
+    APPLIED = 1
+    FAILED = 2
 
 
 class OrderedStock(models.Model):
@@ -28,6 +35,7 @@ class OrderedStock(models.Model):
     osid = models.AutoField(primary_key=True)
     stock = models.ForeignKey(Stock, models.CASCADE)
     amount = models.PositiveIntegerField()
+    status = models.PositiveIntegerField(choices=StockAppliedStatus.choices)
 
 
 class PartialOrder(models.Model):
