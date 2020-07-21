@@ -3,10 +3,11 @@ import os
 
 import requests
 
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, RetrieveAPIView
 from rest_framework.response import Response
 
 from account.permissions import LoggedIn
+from purchase.models import Order, OrderStatus, StockAppliedStatus, TransactionStatus
 from purchase.serializer import OrderedStockSerializer, OrderSerializer, PartialOrderSerializer
 
 
@@ -93,3 +94,22 @@ class CreateOrderAPI(CreateAPIView):
         serializer.save()
 
         return Response(response, status=201)
+
+
+class FailedOrderAPI(RetrieveAPIView):
+    serializer_class = OrderSerializer
+
+    def get(self, request, *args, **kwargs):
+        super().get(request, *args, **kwargs)
+
+    def get_object(self):
+        order = Order.objects.get(oid=self.kwargs['oid'])
+        for partial in order.partials:
+            for stock in partial.stocks:
+                stock.status = StockAppliedStatus.FAILED
+                stock.save()
+            partial.status = OrderStatus.CANCELED
+            partial.save()
+        order.status = TransactionStatus.FAILED
+        order.save()
+        return order
