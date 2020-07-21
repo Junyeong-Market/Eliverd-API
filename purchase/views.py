@@ -96,6 +96,25 @@ class CreateOrderAPI(CreateAPIView):
         return Response(response, status=201)
 
 
+class CancelOrderAPI(RetrieveAPIView):
+    serializer_class = OrderSerializer
+
+    def get(self, request, *args, **kwargs):
+        super().get(request, *args, **kwargs)
+
+    def get_object(self):
+        order = Order.objects.get(oid=self.kwargs['oid'])
+        for partial in order.partials:
+            for stock in partial.stocks:
+                stock.status = StockAppliedStatus.FAILED
+                stock.save()
+            partial.status = OrderStatus.CANCELED
+            partial.save()
+        order.status = TransactionStatus.CANCELED
+        order.save()
+        return order
+
+
 class FailedOrderAPI(RetrieveAPIView):
     serializer_class = OrderSerializer
 
