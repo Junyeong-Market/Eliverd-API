@@ -130,6 +130,7 @@ class CancelOrderAPI(RetrieveAPIView):
 class FailedOrderAPI(RetrieveAPIView):
     serializer_class = OrderSerializer
 
+    @swagger_auto_schema(operation_summary='주문 실 핸들러 [KP]', operation_description='카카오페이 주문 실패 핸들러')
     def get(self, request, *args, **kwargs):
         super().get(request, *args, **kwargs)
 
