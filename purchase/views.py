@@ -11,6 +11,16 @@ from purchase.models import Order, OrderStatus, StockAppliedStatus, TransactionS
 from purchase.serializer import OrderedStockSerializer, OrderSerializer, PartialOrderSerializer
 
 
+class GetOrderAPI(RetrieveAPIView):
+    serializer_class = OrderSerializer
+
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    def get_object(self):
+        return Order.objects.filter(oid=self.kwargs['oid'])
+
+
 class CreateOrderAPI(CreateAPIView):
     serializer_class = OrderSerializer
     permission_classes = [LoggedIn]
