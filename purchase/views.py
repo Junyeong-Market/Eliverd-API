@@ -28,8 +28,7 @@ class CreateOrderAPI(CreateAPIView):
     permission_classes = [LoggedIn]
 
     def post(self, request, *args, **kwargs):
-        '''
-
+        """
         :param request:
         {
             store: 0,
@@ -38,13 +37,10 @@ class CreateOrderAPI(CreateAPIView):
                 amount: 0
             }]
         }
-        :param args:
-        :param kwargs:
-        :return:
-        '''
+        """
         orders = []
         for order in request.data:
-            stocks = request.data.get('stock')
+            stocks = order.get('stock')
             serializers = []
             for stock in stocks:
                 serializer = OrderedStockSerializer(data={
