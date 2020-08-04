@@ -30,7 +30,7 @@ class Session(models.Model):
     def __init__(self, *args, **kwargs):
         super(Session, self).__init__(*args, **kwargs)
         expire = datetime.datetime.now()
-        expire += datetime.timedelta(days=3)
+        expire += datetime.timedelta(years=1)
         self.expireAt = expire
 
     def __str__(self):
