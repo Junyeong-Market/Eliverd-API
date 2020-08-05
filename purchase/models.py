@@ -36,7 +36,7 @@ class OrderedStock(models.Model):
     osid = models.AutoField(primary_key=True)
     stock = models.ForeignKey(Stock, models.CASCADE)
     amount = models.PositiveIntegerField()
-    status = models.PositiveIntegerField(choices=StockAppliedStatus.choices)
+    status = models.PositiveIntegerField(choices=StockAppliedStatus.choices, default=StockAppliedStatus.PREPARED)
 
 
 class PartialOrder(models.Model):
