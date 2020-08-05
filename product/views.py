@@ -9,6 +9,7 @@ from account.permissions import LoggedIn
 from product.models import Product, Manufacturer
 from product.pagination import ManufacturerSearchPagination
 from product.serializer import ProductSerializer, ManufacturerSerializer
+from store.documentation import Lat, Lng, Distance
 from store.models import Stock
 from store.serializer import StockSerializer
 
@@ -60,6 +61,9 @@ class SearchManufacturerAPI(ListAPIView):
 class RadiusProductListAPI(ListAPIView):
     serializer_class = StockSerializer
 
+    @swagger_auto_schema(operation_summary='범위 기반 상품 검색',
+                         operation_description='지정된 범위 내의 상품을 가져옵니다.',
+                         manual_parameters=[Lat, Lng, Distance])
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
