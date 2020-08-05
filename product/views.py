@@ -1,5 +1,6 @@
 import logging
 
+from django.contrib.gis.geos import Point
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.generics import RetrieveAPIView, get_object_or_404, CreateAPIView, ListAPIView
 
@@ -8,6 +9,8 @@ from account.permissions import LoggedIn
 from product.models import Product, Manufacturer
 from product.pagination import ManufacturerSearchPagination
 from product.serializer import ProductSerializer, ManufacturerSerializer
+from store.models import Stock
+from store.serializer import StockSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -52,3 +55,15 @@ class SearchManufacturerAPI(ListAPIView):
 
     def get_queryset(self):
         return Manufacturer.objects.filter(name__contains=self.kwargs['name'])
+
+
+class RadiusProductListAPI(ListAPIView):
+    serializer_class = StockSerializer
+
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        point = Point(float(self.request.query_params.get('lat')), float(self.request.query_params.get('lng')))
+        return Stock.objects.filter(store__location__distance_lte=(point,
+                                                                   float(self.request.query_params.get('distance', 0))))
