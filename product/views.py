@@ -2,7 +2,7 @@ import logging
 
 from django.contrib.gis.geos import Point
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework.generics import RetrieveAPIView, get_object_or_404, CreateAPIView, ListAPIView
+from rest_framework.generics import RetrieveAPIView, get_object_or_404, CreateAPIView, ListAPIView, UpdateAPIView
 
 from account.documentation.session import AuthorizationHeader
 from account.permissions import LoggedIn
@@ -44,8 +44,19 @@ class CreateManufacturerAPI(CreateAPIView):
         return super().post(request, *args, **kwargs)
 
 
+class UpdateManufacturerAPI(UpdateAPIView):
+    serializer_class = ManufacturerSerializer
+    permission_classes = [LoggedIn]
+    lookup_field = 'id'
+
+    def put(self, request, *args, **kwargs):
+        return super().put(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return Manufacturer.objects.filter(pk=self.kwargs['id'])
+
+
 class SearchManufacturerAPI(ListAPIView):
-    queryset = Manufacturer.objects.all()
     serializer_class = ManufacturerSerializer
     pagination_class = ManufacturerSearchPagination
 
