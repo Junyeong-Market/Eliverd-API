@@ -114,7 +114,7 @@ class CancelOrderAPI(RetrieveAPIView):
 
     @swagger_auto_schema(operation_summary='주문 취소 핸들러 [KP]', operation_description='카카오페이 주문 취소 핸들러')
     def get(self, request, *args, **kwargs):
-        super().get(request, *args, **kwargs)
+        return super().get(request, *args, **kwargs)
 
     def get_object(self):
         order = Order.objects.get(oid=self.kwargs['oid'])
@@ -134,7 +134,7 @@ class FailedOrderAPI(RetrieveAPIView):
 
     @swagger_auto_schema(operation_summary='주문 실패 핸들러 [KP]', operation_description='카카오페이 주문 실패 핸들러')
     def get(self, request, *args, **kwargs):
-        super().get(request, *args, **kwargs)
+        return super().get(request, *args, **kwargs)
 
     def get_object(self):
         order = Order.objects.get(oid=self.kwargs['oid'])
