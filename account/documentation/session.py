@@ -15,14 +15,14 @@ SessionCreateSuccessful = openapi.Schema(
 )
 
 IDParameter = openapi.Schema(
-    'id',
+    '아이디',
     description='유저의 아이디',
     type=openapi.TYPE_STRING
 )
 
 PWParameter = openapi.Schema(
-    'password',
-    description='유저의 아이디',
+    '비밀번호',
+    description='유저의 비밀번호',
     type=openapi.TYPE_STRING
 )
 
