@@ -75,35 +75,38 @@ class CreateOrderAPI(CreateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
 
-        instance = serializer.instance
-        oid = instance.oid
-        # response = requests.post('https://kapi.kakao.com/v1/payment/ready',
-        #                          data={
-        #                              'cid': os.getenv('KAKAOPAY_CID'),
-        #                              'partner_order_id': oid,
-        #                              'partner_user_id': request.account.pid,
-        #                              'item_name': instance.store.name,
-        #                              'quantity': 1,
-        #                              'total_amount': instance.total,
-        #                              'vat_amount': instance.total / 11,
-        #                              'tax_free_amount': instance.total - instance.total / 11,
-        #                              'approval_url': f"/purchase/{oid}/success/",
-        #                              'fail_url': f"/purchase/{oid}/fail/",
-        #                              'cancel_url': f"/purchase/{oid}/cancel/"
-        #                          },
-        #                          headers={
-        #                              'Authorization': f"KakaoAK {os.getenv('KAKAO_ADMIN')}"
-        #                          })
+        order = serializer.instance
+        logger.info(order)
+        oid = order.oid
+        total = order.get_total()
+        vat = int(total / 11)
+        response = requests.post('https://kapi.kakao.com/v1/payment/ready',
+                                 data={
+                                     'cid': os.getenv('KAKAOPAY_CID'),
+                                     'partner_order_id': oid,
+                                     'partner_user_id': request.account.pid,
+                                     'item_name': order.get_order_name(),
+                                     'quantity': 1,
+                                     'total_amount': total,
+                                     'vat_amount': vat,
+                                     'tax_free_amount': total - vat,
+                                     'approval_url': f"/purchase/{oid}/success/",
+                                     'fail_url': f"/purchase/{oid}/fail/",
+                                     'cancel_url': f"/purchase/{oid}/cancel/"
+                                 },
+                                 headers={
+                                     'Authorization': f"KakaoAK {os.getenv('KAKAO_ADMIN')}"
+                                 })
 
-        # response = json.loads(response.text)
-        # response['oid'] = oid
+        response = json.loads(response.text)
+        response['oid'] = oid
 
         # response tid로 Order 업데이트
-        # serializer = self.get_serializer(instance, data=response, partial=True)
-        # serializer.save()
+        serializer = self.get_serializer(order, data=response, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
-        # return Response(response, status=201)
-        return Response(serializer.data, status=201)
+        return Response(response, status=201)
 
 
 class CancelOrderAPI(RetrieveAPIView):
