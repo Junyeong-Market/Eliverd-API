@@ -109,6 +109,42 @@ class CreateOrderAPI(CreateAPIView):
         return Response(response, status=201)
 
 
+class SuccessOrderAPI(RetrieveAPIView):
+    serializer_class = OrderSerializer
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.order = None
+
+    def get(self, request, *args, **kwargs):
+        response = super().get(request, *args, **kwargs)
+        requests.post('https://kapi.kakao.com/v1/payment/approve',
+                      data={
+                          'cid': os.getenv('KAKAOPAY_CID'),
+                          'tid': self.order.tid,
+                          'partner_order_id': self.order.oid,
+                          'partner_user_id': self.order.customer.pid,
+                          'pg_token': request.GET['pg_token']
+                      },
+                      headers={
+                          'Authorization': f"KakaoAK {os.getenv('KAKAO_ADMIN')}"
+                      })
+        return response
+
+    def get_object(self):
+        order = Order.objects.get(oid=self.kwargs['oid'])
+        for partial in order.partials:
+            for stock in partial.stocks:
+                stock.status = StockAppliedStatus.APPLIED
+                stock.save()
+            partial.status = OrderStatus.READY if order.is_delivery else OrderStatus.DONE
+            partial.save()
+        order.status = TransactionStatus.PROCESSED
+        order.save()
+        self.order = order
+        return order
+
+
 class CancelOrderAPI(RetrieveAPIView):
     serializer_class = OrderSerializer
 
