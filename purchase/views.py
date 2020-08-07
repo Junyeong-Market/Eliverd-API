@@ -136,13 +136,15 @@ class SuccessOrderAPI(RetrieveAPIView):
         for partial in order.partials.all():
             for stock in partial.stocks.all():
                 stock.status = StockAppliedStatus.APPLIED
+                stock.stock.amount = stock.stock.amount - stock.amount
+                result = stock.stock.save()
+                logger.info(result)
                 stock.save()
             partial.status = OrderStatus.READY if order.is_delivery else OrderStatus.DONE
-            partial.save()
         order.status = TransactionStatus.PROCESSED
         order.save()
         self.order = order
-        return order
+        return self.order
 
 
 class CancelOrderAPI(RetrieveAPIView):
