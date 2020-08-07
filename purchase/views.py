@@ -85,7 +85,7 @@ class CreateOrderAPI(CreateAPIView):
                                      'total_amount': total,
                                      'vat_amount': vat,
                                      'tax_free_amount': total - vat,
-                                     'approval_url': f"{host}/purchase/{oid}/success/",
+                                     'approval_url': f"{host}/purchase/{oid}/approve/",
                                      'fail_url': f"{host}/purchase/{oid}/fail/",
                                      'cancel_url': f"{host}/purchase/{oid}/cancel/"
                                  },
