@@ -133,8 +133,8 @@ class SuccessOrderAPI(RetrieveAPIView):
 
     def get_object(self):
         order = Order.objects.get(oid=self.kwargs['oid'])
-        for partial in order.partials:
-            for stock in partial.stocks:
+        for partial in order.partials.all():
+            for stock in partial.stocks.all():
                 stock.status = StockAppliedStatus.APPLIED
                 stock.save()
             partial.status = OrderStatus.READY if order.is_delivery else OrderStatus.DONE
@@ -154,8 +154,8 @@ class CancelOrderAPI(RetrieveAPIView):
 
     def get_object(self):
         order = Order.objects.get(oid=self.kwargs['oid'])
-        for partial in order.partials:
-            for stock in partial.stocks:
+        for partial in order.partials.all():
+            for stock in partial.stocks.all():
                 stock.status = StockAppliedStatus.FAILED
                 stock.save()
             partial.status = OrderStatus.CANCELED
@@ -174,8 +174,8 @@ class FailedOrderAPI(RetrieveAPIView):
 
     def get_object(self):
         order = Order.objects.get(oid=self.kwargs['oid'])
-        for partial in order.partials:
-            for stock in partial.stocks:
+        for partial in order.partials.all():
+            for stock in partial.stocks.all():
                 stock.status = StockAppliedStatus.FAILED
                 stock.save()
             partial.status = OrderStatus.CANCELED
