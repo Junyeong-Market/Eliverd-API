@@ -80,6 +80,7 @@ class CreateOrderAPI(CreateAPIView):
         oid = order.oid
         total = order.get_total()
         vat = int(total / 11)
+        host = f"http://{request.META['HTTP_HOST']}"
         response = requests.post('https://kapi.kakao.com/v1/payment/ready',
                                  data={
                                      'cid': os.getenv('KAKAOPAY_CID'),
@@ -90,9 +91,9 @@ class CreateOrderAPI(CreateAPIView):
                                      'total_amount': total,
                                      'vat_amount': vat,
                                      'tax_free_amount': total - vat,
-                                     'approval_url': f"/purchase/{oid}/success/",
-                                     'fail_url': f"/purchase/{oid}/fail/",
-                                     'cancel_url': f"/purchase/{oid}/cancel/"
+                                     'approval_url': f"{host}/purchase/{oid}/success/",
+                                     'fail_url': f"{host}/purchase/{oid}/fail/",
+                                     'cancel_url': f"{host}/purchase/{oid}/cancel/"
                                  },
                                  headers={
                                      'Authorization': f"KakaoAK {os.getenv('KAKAO_ADMIN')}"
@@ -105,7 +106,6 @@ class CreateOrderAPI(CreateAPIView):
         serializer = self.get_serializer(order, data=response, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-
         return Response(response, status=201)
 
 
