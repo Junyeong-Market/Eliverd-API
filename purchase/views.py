@@ -9,6 +9,7 @@ from rest_framework.generics import CreateAPIView, RetrieveAPIView
 from rest_framework.response import Response
 
 from account.permissions import LoggedIn
+from purchase.documentation import PgToken
 from purchase.models import Order, OrderStatus, StockAppliedStatus, TransactionStatus
 from purchase.serializer import OrderedStockSerializer, OrderSerializer, PartialOrderSerializer
 
@@ -116,6 +117,8 @@ class SuccessOrderAPI(RetrieveAPIView):
         super().__init__(**kwargs)
         self.order = None
 
+    @swagger_auto_schema(operation_summary='주문 성공 핸들러 [KP]', operation_description='카카오페이 주문 성공 핸들러',
+                         manual_parameters=[PgToken])
     def get(self, request, *args, **kwargs):
         response = super().get(request, *args, **kwargs)
         requests.post('https://kapi.kakao.com/v1/payment/approve',
