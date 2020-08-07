@@ -43,6 +43,7 @@ class PartialOrder(models.Model):
     store = models.ForeignKey(Store, on_delete=models.CASCADE, null=True)
     status = models.CharField(choices=OrderStatus.choices, max_length=16, default=OrderStatus.PENDING)
     stocks = models.ManyToManyField(OrderedStock)
+    is_delivery = models.BooleanField(null=False, default=True)
 
 
 class Order(models.Model):
