@@ -57,3 +57,8 @@ class Order(models.Model):
 
     def get_total(self):
         return self.partials.aggregate(Sum('stocks__stock__price'))['stocks__stock__price__sum']
+
+    def get_order_name(self):
+        first_name = self.partials.filter().first().store.name
+        count = self.partials.count()
+        return f"{first_name} 포함 {count}개 상점에 주문" if count > 1 else f"{first_name}에 주문"
