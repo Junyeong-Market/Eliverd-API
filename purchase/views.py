@@ -8,8 +8,9 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.generics import CreateAPIView, RetrieveAPIView
 from rest_framework.response import Response
 
+from account.documentation.session import AuthorizationHeader
 from account.permissions import LoggedIn
-from purchase.documentation import PgToken
+from purchase.documentation import PgToken, CreateOrderBody, CreateOrderResponse, DeliveryParameter
 from purchase.models import Order, OrderStatus, StockAppliedStatus, TransactionStatus
 from purchase.serializer import OrderedStockSerializer, OrderSerializer, PartialOrderSerializer
 
@@ -31,6 +32,9 @@ class CreateOrderAPI(CreateAPIView):
     serializer_class = OrderSerializer
     permission_classes = [LoggedIn]
 
+    @swagger_auto_schema(operation_summary='주문 생성', operation_description='여러 상점에 주문을 신청합니다.',
+                         manual_parameters=[AuthorizationHeader, DeliveryParameter], request_body=CreateOrderBody,
+                         responses={200: CreateOrderResponse})
     def post(self, request, *args, **kwargs):
         is_delivery = request.GET['is_delivery'] == 'true'
         orders = []
