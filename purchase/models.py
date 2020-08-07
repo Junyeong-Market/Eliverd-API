@@ -1,8 +1,5 @@
 from django.db import models
 
-# Create your models here.
-from django.db.models import Sum
-
 from account.models import User
 from store.models import Stock, Store
 
@@ -50,11 +47,9 @@ class PartialOrder(models.Model):
 class Order(models.Model):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.total = self.partials.aggregate(Sum('stocks__stock__price'))['stocks__stock__price__sum']
 
     oid = models.AutoField(primary_key=True)
     tid = models.CharField(max_length=20, unique=True, null=True)
     customer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     partials = models.ManyToManyField(PartialOrder)
     status = models.CharField(choices=TransactionStatus.choices, max_length=16, default=TransactionStatus.PENDING)
-    total = models.PositiveIntegerField(null=True)
