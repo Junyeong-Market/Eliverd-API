@@ -1,7 +1,7 @@
 from drf_yasg import openapi
 
 from account.documentation.session import IDParameter, PWParameter
-from eliverd.docs.errors import ErrorArray
+from eliverd.documentation.errors import ErrorArray
 
 UserSearchParameter = openapi.Parameter(
     'is_seller',
