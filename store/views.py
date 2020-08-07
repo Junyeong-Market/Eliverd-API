@@ -17,11 +17,10 @@ from product.serializer import ProductSerializer
 from product.views import CreateProductAPI
 from purchase.models import PartialOrder
 from purchase.serializer import DeepOrderSerializer
-from store.documentation import StoreNameParameter, StoreDescriptionParameter, StoreRegisteredNumberParameter, \
-    StoreLatParameter, StoreLngParameter, StoreInitBody, Lat, Lng, Distance
+from store.documentation import StoreInitBody, Lat, Lng, Distance
 from store.models import Store, Stock
 from store.pagination import StoreStockPagination
-from store.serializer import StoreSerializer, StockSerializer, StoreInitSerializer, StockModifySerializer, \
+from store.serializer import StoreSerializer, StockSerializer, StockModifySerializer, \
     FlatStoreSerializer, FlatStockSerializer, GetStockSerializer
 
 logger = logging.getLogger(__name__)
@@ -43,14 +42,6 @@ class RadiusStoreList(ListAPIView):
             return Store.objects.filter(location__distance_lte=(point, float(self.request.query_params.get('distance', 0))))
         except TypeError:
             raise SuspiciousOperation('Bad Request')
-
-
-# class AreaStoreView(ListAPIView):
-#     queryset = Store.objects.filter()
-#     serializer_class = StoreSerializer
-#
-#     def get_queryset(self):
-#         return Store.objects.filter()
 
 
 class StoreView(RetrieveAPIView):
