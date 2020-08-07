@@ -65,15 +65,13 @@ class CreateOrderAPI(CreateAPIView):
             orders.append(serializer)
         for order in orders:
             order.save()
+        # PartialOrder 생성
         orders = [serializer.instance.poid for serializer in orders]
-        # OrderedStock 생성
 
-        request._full_body = {
+        serializer = self.get_serializer(data={
             'customer': request.account.pid,
             'partials': orders,
-        }
-
-        serializer = self.get_serializer(data=request.data)
+        })
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
 
