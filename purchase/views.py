@@ -32,19 +32,10 @@ class CreateOrderAPI(CreateAPIView):
     permission_classes = [LoggedIn]
 
     def post(self, request, *args, **kwargs):
-        """
-        :param request:
-        {
-            store: 0,
-            stock: [{
-                id: id,
-                amount: 0
-            }]
-        }
-        """
+        is_delivery = request.GET['is_delivery'] == 'true'
         orders = []
         for order in request.data:
-            stocks = order.get('stock')
+            stocks = order.get('stocks')
             serializers = []
             for stock in stocks:
                 serializer = OrderedStockSerializer(data={
@@ -60,7 +51,8 @@ class CreateOrderAPI(CreateAPIView):
 
             serializer = PartialOrderSerializer(data={
                 'store': order.get('store'),
-                'stocks': stocks
+                'stocks': stocks,
+                'is_delivery': is_delivery
             })
             serializer.is_valid(raise_exception=True)
             orders.append(serializer)
@@ -72,6 +64,7 @@ class CreateOrderAPI(CreateAPIView):
         serializer = self.get_serializer(data={
             'customer': request.account.pid,
             'partials': orders,
+            'is_delivery': is_delivery
         })
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
