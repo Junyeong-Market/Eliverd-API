@@ -12,6 +12,7 @@ from rest_framework.response import Response
 from account.documentation.session import AuthorizationHeader
 from account.pagination import AccountSearchPagination
 from account.permissions import LoggedIn
+from account.serializer import SafeUserSerializer
 from product.models import Product
 from product.serializer import ProductSerializer
 from product.views import CreateProductAPI
@@ -180,3 +181,22 @@ class StoreOrderAPI(ListAPIView):
 
     def get_queryset(self):
         return PartialOrder.objects.filter(store__id=self.kwargs['id'])
+
+
+class StoreAdminAPI(ListAPIView, CreateAPIView, DestroyAPIView):
+    serializer_class = SafeUserSerializer
+
+    @swagger_auto_schema(operation_summary='상점 관리자 조회', operation_description='상점의 관리자 목록을 조회합니다.')
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    @swagger_auto_schema(operation_summary='상정 관리자 추가', operation_description='상점에 관리자를 추가합니다.')
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+
+    @swagger_auto_schema(operation_summary='상점 관리자 제거', operation_description='상점에서 관리자를 제거합니다.')
+    def delete(self, request, *args, **kwargs):
+        return super().delete(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return Store.objects.get(id=self.kwargs['id']).registerer

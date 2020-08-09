@@ -1,6 +1,7 @@
 from django.urls import path
 
-from store.views import RadiusStoreList, StoreStockListAPI, StoreView, ModifyStockAPI, CreateStoreAPI, StoreOrderAPI
+from store.views import RadiusStoreList, StoreStockListAPI, StoreView, ModifyStockAPI, CreateStoreAPI, StoreOrderAPI, \
+    StoreAdminAPI
 
 urlpatterns = [
     path('', CreateStoreAPI.as_view()),
@@ -8,5 +9,6 @@ urlpatterns = [
     path('<id>/', StoreView.as_view()),
     path('<id>/stocks/', StoreStockListAPI.as_view()),
     path('<id>/stock/', ModifyStockAPI.as_view()),
-    path('<id>/orders/', StoreOrderAPI.as_view())
+    path('<id>/orders/', StoreOrderAPI.as_view()),
+    path('<id>/admin/', StoreAdminAPI.as_view())
 ]
