@@ -18,7 +18,7 @@ from product.serializer import ProductSerializer
 from product.views import CreateProductAPI
 from purchase.models import PartialOrder
 from purchase.serializer import DeepOrderSerializer
-from store.documentation import StoreInitBody, Lat, Lng, Distance
+from store.documentation import StoreInitBody, Lat, Lng, Distance, ModifyStockBody
 from store.models import Store, Stock
 from store.pagination import StoreStockPagination
 from store.serializer import StoreSerializer, StockSerializer, StockModifySerializer, \
@@ -133,7 +133,7 @@ class ModifyStockAPI(UpdateModelMixin, CreateAPIView):
 
     @swagger_auto_schema(operation_summary='상점 재고 수정',
                          operation_description='상점에 재고를 추가/수정/삭제합니다.',
-                         request_body=StockModifySerializer,
+                         request_body=ModifyStockBody,
                          responses={200: FlatStockSerializer})
     def post(self, request, *args, **kwargs):
         try:

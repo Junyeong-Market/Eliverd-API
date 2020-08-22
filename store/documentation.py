@@ -57,3 +57,28 @@ Distance = openapi.Parameter(
     description='검색 범위',
     type=openapi.TYPE_NUMBER
 )
+
+Ian = openapi.Schema(
+    description='상품 바코드',
+    type=openapi.TYPE_STRING
+)
+
+Price = openapi.Schema(
+    description='상품 가격',
+    type=openapi.TYPE_INTEGER
+)
+
+Amount = openapi.Schema(
+    description='상품 수량',
+    type=openapi.TYPE_INTEGER
+)
+
+ModifyStockBody = openapi.Schema(
+    description='재고 수정 데이터',
+    type=openapi.TYPE_OBJECT,
+    properties={
+        'ian': Ian,
+        'price': Price,
+        'amount': Amount
+    }
+)
