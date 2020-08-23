@@ -12,13 +12,13 @@ from account.documentation.session import AuthorizationHeader
 from account.permissions import LoggedIn
 from purchase.documentation import PgToken, CreateOrderBody, CreateOrderResponse, DeliveryParameter
 from purchase.models import Order, OrderStatus, StockAppliedStatus, TransactionStatus
-from purchase.serializer import OrderedStockSerializer, OrderSerializer, PartialOrderSerializer
+from purchase.serializer import OrderedStockSerializer, OrderSerializer, PartialOrderSerializer, DeepOrderSerializer
 
 logger = logging.getLogger(__name__)
 
 
 class GetOrderAPI(RetrieveAPIView):
-    serializer_class = OrderSerializer
+    serializer_class = DeepOrderSerializer
 
     @swagger_auto_schema(operation_summary='주문 조회', operation_description='주문을 조회합니다.')
     def get(self, request, *args, **kwargs):
@@ -108,7 +108,7 @@ class CreateOrderAPI(CreateAPIView):
 
 
 class SuccessOrderAPI(RetrieveAPIView):
-    serializer_class = OrderSerializer
+    serializer_class = DeepOrderSerializer
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -148,7 +148,7 @@ class SuccessOrderAPI(RetrieveAPIView):
 
 
 class CancelOrderAPI(RetrieveAPIView):
-    serializer_class = OrderSerializer
+    serializer_class = DeepOrderSerializer
 
     @swagger_auto_schema(operation_summary='주문 취소 핸들러 [KP]', operation_description='카카오페이 주문 취소 핸들러')
     def get(self, request, *args, **kwargs):
@@ -168,7 +168,7 @@ class CancelOrderAPI(RetrieveAPIView):
 
 
 class FailedOrderAPI(RetrieveAPIView):
-    serializer_class = OrderSerializer
+    serializer_class = DeepOrderSerializer
 
     @swagger_auto_schema(operation_summary='주문 실패 핸들러 [KP]', operation_description='카카오페이 주문 실패 핸들러')
     def get(self, request, *args, **kwargs):
