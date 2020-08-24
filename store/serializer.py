@@ -27,6 +27,8 @@ class StoreInitSerializer(serializers.ModelSerializer):
 
 
 class StockSerializer(serializers.ModelSerializer):
+    store = StoreSerializer()
+
     class Meta:
         model = Stock
         depth = 2
