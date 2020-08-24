@@ -22,7 +22,6 @@ class GetOrderAPI(RetrieveAPIView):
 
     @swagger_auto_schema(operation_summary='주문 조회', operation_description='주문을 조회합니다.')
     def get(self, request, *args, **kwargs):
-        logger.info(self.get_object())
         return super().get(request, *args, **kwargs)
 
     def get_object(self):
