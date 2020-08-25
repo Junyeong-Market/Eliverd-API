@@ -77,7 +77,6 @@ class CreateOrderAPI(CreateAPIView):
         self.perform_create(serializer)
 
         order = serializer.instance
-        logger.info(order)
         oid = order.oid
         total = order.get_total()
         vat = int(total / 11)
@@ -186,5 +185,66 @@ class FailedOrderAPI(RetrieveAPIView):
             partial.status = OrderStatus.CANCELED
             partial.save()
         order.status = TransactionStatus.FAILED
+        order.save()
+        return order
+
+
+class ContinueOrderAPI(RetrieveAPIView):
+    serializer_class = GetOrderSerializer
+    permission_classes = [LoggedIn]
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    @swagger_auto_schema(operation_summary='주문 계속 진행', operation_description='취소/실패한 주문을 다시 진행합니다.',
+                         manual_parameters=[AuthorizationHeader], responses={200: CreateOrderResponse})
+    def get(self, request, *args, **kwargs):
+        order = self.get_object()
+        if order.status == TransactionStatus.PROCESSED:
+            return Response(400)
+        oid = order.oid
+        total = order.get_total()
+        vat = int(total / 11)
+        host = f"http://{request.META['HTTP_HOST']}"
+        response = requests.post('https://kapi.kakao.com/v1/payment/ready',
+                                 data={
+                                     'cid': os.getenv('KAKAOPAY_CID'),
+                                     'partner_order_id': oid,
+                                     'partner_user_id': request.account.pid,
+                                     'item_name': order.get_order_name(),
+                                     'quantity': 1,
+                                     'total_amount': total,
+                                     'vat_amount': vat,
+                                     'tax_free_amount': total - vat,
+                                     'approval_url': f"{host}/purchase/{oid}/approve/",
+                                     'fail_url': f"{host}/purchase/{oid}/fail/",
+                                     'cancel_url': f"{host}/purchase/{oid}/cancel/"
+                                 },
+                                 headers={
+                                     'Authorization': f"KakaoAK {os.getenv('KAKAO_ADMIN')}"
+                                 })
+
+        response = json.loads(response.text)
+        response['oid'] = oid
+
+        # response tid로 Order 업데이트
+        serializer = self.get_serializer(order, data=response, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(response, status=201)
+
+    def get_object(self):
+        order = Order.objects.get(oid=self.kwargs['oid'])
+        if order.status == TransactionStatus.PROCESSED:
+            return order
+        for partial in order.partials.all():
+            for stock in partial.stocks.all():
+                stock.status = StockAppliedStatus.PREPARED
+                stock.stock.amount = stock.stock.amount - stock.amount
+                result = stock.stock.save()
+                logger.info(result)
+                stock.save()
+            partial.status = OrderStatus.PENDING
+        order.status = TransactionStatus.PENDING
         order.save()
         return order
