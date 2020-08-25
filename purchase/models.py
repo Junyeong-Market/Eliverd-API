@@ -43,7 +43,7 @@ class PartialOrder(models.Model):
     store = models.ForeignKey(Store, on_delete=models.CASCADE, null=True)
     status = models.CharField(choices=OrderStatus.choices, max_length=16, default=OrderStatus.PENDING)
     stocks = models.ManyToManyField(OrderedStock)
-    is_delivery = models.BooleanField(null=False, default=True)
+    destination = models.PointField(null=True)
 
 
 class Order(models.Model):
@@ -55,8 +55,7 @@ class Order(models.Model):
     customer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     partials = models.ManyToManyField(PartialOrder)
     status = models.CharField(choices=TransactionStatus.choices, max_length=16, default=TransactionStatus.PENDING)
-    is_delivery = models.BooleanField(null=False, default=True)
-    location = models.PointField(null=True)
+    destination = models.PointField(null=True)
 
     def get_total(self):
         return self.partials.aggregate(Sum('stocks__stock__price'))['stocks__stock__price__sum']
