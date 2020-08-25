@@ -3,6 +3,7 @@ import os
 import logging
 
 import requests
+from django.contrib.gis.geos import Point
 from drf_yasg.utils import swagger_auto_schema
 
 from rest_framework.generics import CreateAPIView, RetrieveAPIView
@@ -36,9 +37,11 @@ class CreateOrderAPI(CreateAPIView):
                          manual_parameters=[AuthorizationHeader, DeliveryParameter], request_body=CreateOrderBody,
                          responses={200: CreateOrderResponse})
     def post(self, request, *args, **kwargs):
-        is_delivery = request.GET['is_delivery'] == 'true'
+        destination = request.data.get('deliver_to', None)
+        destination = Point(float(destination.get('lat')), float(destination.get('lng')))\
+            if destination is not None else None
         orders = []
-        for order in request.data:
+        for order in request.data['orders']:
             stocks = order.get('stocks')
             serializers = []
             for stock in stocks:
@@ -56,7 +59,7 @@ class CreateOrderAPI(CreateAPIView):
             serializer = PartialOrderSerializer(data={
                 'store': order.get('store'),
                 'stocks': stocks,
-                'is_delivery': is_delivery
+                'destination': destination
             })
             serializer.is_valid(raise_exception=True)
             orders.append(serializer)
@@ -68,7 +71,7 @@ class CreateOrderAPI(CreateAPIView):
         serializer = self.get_serializer(data={
             'customer': request.account.pid,
             'partials': orders,
-            'is_delivery': is_delivery
+            'destination': destination
         })
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
