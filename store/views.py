@@ -17,12 +17,12 @@ from product.models import Product
 from product.serializer import ProductSerializer
 from product.views import CreateProductAPI
 from purchase.models import PartialOrder
-from purchase.serializer import DeepOrderSerializer
+from purchase.serializer import DeepOrderSerializer, GetPartialOrderSerializer
 from store.documentation import StoreInitBody, Lat, Lng, Distance, ModifyStockBody
 from store.models import Store, Stock
 from store.pagination import StoreStockPagination
-from store.serializer import StoreSerializer, StockSerializer, StockModifySerializer, \
-    FlatStoreSerializer, FlatStockSerializer, GetStockSerializer
+from store.serializer import StoreSerializer, StockSerializer, FlatStoreSerializer, FlatStockSerializer, \
+    GetStockSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -171,7 +171,7 @@ class ModifyStockAPI(UpdateModelMixin, CreateAPIView):
 
 
 class StoreOrderAPI(ListAPIView):
-    serializer_class = DeepOrderSerializer
+    serializer_class = GetPartialOrderSerializer
     pagination_class = AccountSearchPagination
 
     @swagger_auto_schema(operation_summary='상점 별 주문 내역 조회',

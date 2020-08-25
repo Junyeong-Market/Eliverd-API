@@ -16,7 +16,7 @@ from account.pagination import AccountSearchPagination
 from account.permissions import NotLoggedIn, LoggedIn
 from account.serializer import UserSerializer, SessionSerializer, SafeUserSerializer, UserEditSerializer
 from purchase.models import Order
-from purchase.serializer import OrderSerializer, DeepOrderSerializer
+from purchase.serializer import GetOrderSerializer
 from store.models import Store
 from store.serializer import StoreSerializer
 
@@ -175,7 +175,7 @@ class UserOwnedStoreAPI(ListAPIView):
 
 
 class UserOrderAPI(ListAPIView):
-    serializer_class = DeepOrderSerializer
+    serializer_class = GetOrderSerializer
     pagination_class = AccountSearchPagination
 
     @swagger_auto_schema(operation_summary='유저 주문 내역 조회', operation_description='유저의 주문 내역을 가져옵니다.')
