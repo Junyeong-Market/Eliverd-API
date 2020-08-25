@@ -22,6 +22,7 @@ class User(models.Model):
     password = models.CharField(max_length=256)
     realname = models.CharField(max_length=128, default='사용자')
     nickname = models.CharField(max_length=50, unique=True)
+    home = models.PointField(null=True)
     is_seller = models.BooleanField(null=False, default=False)
 
 

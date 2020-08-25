@@ -56,6 +56,7 @@ class Order(models.Model):
     partials = models.ManyToManyField(PartialOrder)
     status = models.CharField(choices=TransactionStatus.choices, max_length=16, default=TransactionStatus.PENDING)
     is_delivery = models.BooleanField(null=False, default=True)
+    location = models.PointField(null=True)
 
     def get_total(self):
         return self.partials.aggregate(Sum('stocks__stock__price'))['stocks__stock__price__sum']
