@@ -11,7 +11,7 @@ from rest_framework.response import Response
 
 from account.documentation.session import AuthorizationHeader
 from account.permissions import LoggedIn
-from purchase.documentation import PgToken, CreateOrderBody, CreateOrderResponse, DeliveryParameter
+from purchase.documentation import PgToken, CreateOrderBody, CreateOrderResponse
 from purchase.models import Order, OrderStatus, StockAppliedStatus, TransactionStatus
 from purchase.serializer import OrderedStockSerializer, OrderSerializer, PartialOrderSerializer, GetOrderSerializer
 
@@ -34,7 +34,7 @@ class CreateOrderAPI(CreateAPIView):
     permission_classes = [LoggedIn]
 
     @swagger_auto_schema(operation_summary='주문 생성', operation_description='여러 상점에 주문을 신청합니다.',
-                         manual_parameters=[AuthorizationHeader, DeliveryParameter], request_body=CreateOrderBody,
+                         manual_parameters=[AuthorizationHeader], request_body=CreateOrderBody,
                          responses={200: CreateOrderResponse})
     def post(self, request, *args, **kwargs):
         destination = request.data.get('deliver_to', None)

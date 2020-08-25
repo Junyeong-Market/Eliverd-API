@@ -1,5 +1,7 @@
 from drf_yasg import openapi
 
+from store.documentation import Lng, Lat
+
 PgToken = openapi.Parameter(
     'KP Token',
     openapi.IN_QUERY,
@@ -7,7 +9,7 @@ PgToken = openapi.Parameter(
     type=openapi.TYPE_STRING
 )
 
-CreateOrderBody = openapi.Schema(
+Orders = openapi.Schema(
     type=openapi.TYPE_ARRAY,
     items=openapi.Schema(
         type=openapi.TYPE_OBJECT,
@@ -36,21 +38,23 @@ CreateOrderBody = openapi.Schema(
                         )
                     }
                 )
-            ),
-            'is_delivery': openapi.Schema(
-                '주문 여부',
-                type=openapi.TYPE_BOOLEAN,
-                description='배달시키는 주문인지 아닌지 표기'
             )
         }
     )
 )
 
-DeliveryParameter = openapi.Parameter(
-    'is_delivery',
-    openapi.IN_QUERY,
-    type=openapi.TYPE_BOOLEAN,
-    description='배달 여부 표기'
+CreateOrderBody = openapi.Schema(
+    type=openapi.TYPE_OBJECT,
+    properties={
+        'orders': Orders,
+        'deliver_to': openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'lat': Lat,
+                'lng': Lng
+            }
+        )
+    }
 )
 
 KPNextRedirectURL = openapi.Schema(
