@@ -183,4 +183,4 @@ class UserOrderAPI(ListAPIView):
         return super().get(request, *args, **kwargs)
 
     def get_queryset(self):
-        return Order.objects.filter(customer__pid=self.kwargs['pid'])
+        return Order.objects.filter(customer__pid=self.kwargs['pid']).order_by('oid')
