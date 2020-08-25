@@ -3,7 +3,7 @@ import logging
 import hashlib
 import uuid
 
-from django.db import models
+from django.contrib.gis.db import models
 
 logger = logging.getLogger(__name__)
 

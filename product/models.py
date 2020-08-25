@@ -1,6 +1,6 @@
 import uuid
 
-from django.db import models
+from django.contrib.gis.db import models
 
 
 class Manufacturer(models.Model):

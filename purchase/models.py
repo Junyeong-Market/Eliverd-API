@@ -1,5 +1,5 @@
-from django.db import models
-from django.db.models import Sum
+from django.contrib.gis.db import models
+from django.contrib.gis.db.models import Sum
 
 from account.models import User
 from store.models import Stock, Store
