@@ -180,7 +180,7 @@ class StoreOrderAPI(ListAPIView):
         return super().get(request, *args, **kwargs)
 
     def get_queryset(self):
-        return PartialOrder.objects.filter(store__id=self.kwargs['id']).order_by('poid')
+        return PartialOrder.objects.filter(store__id=self.kwargs['id']).order_by('-poid')
 
 
 class StoreAdminAPI(ListAPIView, CreateAPIView, DestroyAPIView):
