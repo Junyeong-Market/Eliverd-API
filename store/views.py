@@ -96,7 +96,13 @@ class StoreStockListAPI(ListAPIView):
         return super().get(request, *args, **kwargs)
 
     def get_queryset(self):
-        return Stock.objects.filter(store__id=self.kwargs['id'], amount__gt=0)
+        category = self.request.GET.get('category')
+        if category:
+            return Stock.objects.filter(store__id=self.kwargs['id'], amount__gt=0,
+                                        product__name__contains=self.request.GET.get('name', ""),
+                                        product__category=category)
+        return Stock.objects.filter(store__id=self.kwargs['id'], amount__gt=0,
+                                    product__name__contains=self.request.GET.get('name', ""))
 
 
 class AddStockAPI(CreateAPIView):
