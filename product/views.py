@@ -82,9 +82,8 @@ class RadiusProductListAPI(ListAPIView):
         point = Point(float(self.request.query_params.get('lat')), float(self.request.query_params.get('lng')))
         category = self.request.GET.get('category')
         if category:
-            return Stock.objects.filter(store__location__distance_lte=(point,
-                                                                       float(self.request.query_params.get('distance',
-                                                                                                           0))),
+            return Stock.objects.filter(store__location__distance_lte=
+                                        (point, float(self.request.query_params.get('distance', 0))),
                                         product__name__contains=self.request.GET.get('name', ""),
                                         product__category=category)
         return Stock.objects.filter(store__location__distance_lte=(point,
