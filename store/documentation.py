@@ -1,5 +1,7 @@
 from drf_yasg import openapi
 
+from product.models import Category
+
 StoreNameParameter = openapi.Schema(
     description='상점 이름',
     type=openapi.TYPE_STRING,
@@ -81,4 +83,19 @@ ModifyStockBody = openapi.Schema(
         'price': Price,
         'amount': Amount
     }
+)
+
+Categories = openapi.Parameter(
+    'category',
+    openapi.IN_QUERY,
+    description='상품 카테고리',
+    type=openapi.TYPE_STRING,
+    enum=[x[0] for x in Category.choices]
+)
+
+ProductName = openapi.Parameter(
+    'name',
+    openapi.IN_QUERY,
+    description='상품 이름',
+    type=openapi.TYPE_STRING
 )
