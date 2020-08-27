@@ -1,8 +1,12 @@
+import logging
+
 from django.contrib.gis.db import models
 from django.contrib.gis.db.models import Sum
 
 from account.models import User
 from store.models import Stock, Store
+
+logger = logging.getLogger(__name__)
 
 
 class TransactionStatus(models.TextChoices):
@@ -58,7 +62,11 @@ class Order(models.Model):
     destination = models.PointField(null=True)
 
     def get_total(self):
-        return self.partials.aggregate(Sum('stocks__stock__price'))['stocks__stock__price__sum']
+        total = 0
+        for partial in self.partials.all():
+            for stock in partial.stocks.all():
+                total += stock.amount * stock.stock.price
+        return total
 
     def get_order_name(self):
         first_name = self.partials.filter().first().store.name
