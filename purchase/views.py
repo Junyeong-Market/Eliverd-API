@@ -142,7 +142,7 @@ class SuccessOrderAPI(RetrieveAPIView):
                 result = stock.stock.save()
                 logger.info(result)
                 stock.save()
-            partial.status = OrderStatus.READY if order.is_delivery else OrderStatus.DONE
+            partial.status = OrderStatus.READY if order.destination else OrderStatus.DONE
         order.status = TransactionStatus.PROCESSED
         order.save()
         self.order = order
