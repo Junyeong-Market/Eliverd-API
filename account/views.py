@@ -171,7 +171,7 @@ class UserOwnedStoreAPI(ListAPIView):
         return super().get(request, *args, **kwargs)
 
     def get_queryset(self):
-        return Store.objects.filter(registerer__password__contains=self.kwargs['pid'])
+        return Store.objects.filter(registerer__pid=self.kwargs['pid'])
 
 
 class UserOrderAPI(ListAPIView):
