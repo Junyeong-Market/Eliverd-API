@@ -9,7 +9,7 @@ from account.permissions import LoggedIn
 from product.models import Product, Manufacturer
 from product.pagination import ManufacturerSearchPagination
 from product.serializer import ProductSerializer, ManufacturerSerializer
-from store.documentation import Lat, Lng, Distance
+from store.documentation import Lat, Lng, Distance, ProductName, Categories
 from store.models import Stock
 from store.serializer import StockSerializer
 
@@ -74,11 +74,19 @@ class RadiusProductListAPI(ListAPIView):
 
     @swagger_auto_schema(operation_summary='범위 기반 상품 검색',
                          operation_description='지정된 범위 내의 상품을 가져옵니다.',
-                         manual_parameters=[Lat, Lng, Distance])
+                         manual_parameters=[Lat, Lng, Distance, Categories, ProductName])
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
     def get_queryset(self):
         point = Point(float(self.request.query_params.get('lat')), float(self.request.query_params.get('lng')))
+        category = self.request.GET.get('category')
+        if category:
+            return Stock.objects.filter(store__location__distance_lte=(point,
+                                                                       float(self.request.query_params.get('distance',
+                                                                                                           0))),
+                                        product__name__contains=self.request.GET.get('name', ""),
+                                        product__category=category)
         return Stock.objects.filter(store__location__distance_lte=(point,
-                                                                   float(self.request.query_params.get('distance', 0))))
+                                                                   float(self.request.query_params.get('distance', 0))),
+                                    product__name__contains=self.request.GET.get('name', ""))
