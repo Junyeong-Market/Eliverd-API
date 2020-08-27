@@ -32,6 +32,14 @@ StoreInitBody = openapi.Schema(
     type=openapi.TYPE_OBJECT,
     properties={
         'name': StoreNameParameter,
+        'register': openapi.Schema(
+            description='관리자 목록',
+            type=openapi.TYPE_ARRAY,
+            items=openapi.Schema(
+                description='사용자 ID',
+                type=openapi.TYPE_INTEGER
+            )
+        ),
         'description': StoreDescriptionParameter,
         'registered_number': StoreRegisteredNumberParameter,
         'lat': StoreLatParameter,
