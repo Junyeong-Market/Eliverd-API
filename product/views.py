@@ -89,3 +89,18 @@ class RadiusProductListAPI(ListAPIView):
         return Stock.objects.filter(store__location__distance_lte=
                                     (point, float(self.request.query_params.get('distance', 0))),
                                     product__name__contains=self.request.GET.get('name', ""))
+
+
+class RecommendedProductListAPI(ListAPIView):
+    serializer_class = StockSerializer
+
+    @swagger_auto_schema(operation_summary='오늘의 상품 추천',
+                         operation_description='지정된 범위 내의 상품을 가져옵니다.',
+                         manual_parameters=[Lat, Lng])
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        point = Point(float(self.request.query_params.get('lat')), float(self.request.query_params.get('lng')))
+
+        return Stock.objects.order_by('?').filter(store__location__distance_lte=(point, 5))[:5]
