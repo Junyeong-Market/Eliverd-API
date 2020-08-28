@@ -1,7 +1,7 @@
 import logging
 
 from django.contrib.gis.db import models
-from django.contrib.gis.db.models import Sum
+from django.db.models.functions import Now
 
 from account.models import User
 from store.models import Stock, Store
@@ -60,6 +60,7 @@ class Order(models.Model):
     partials = models.ManyToManyField(PartialOrder)
     status = models.CharField(choices=TransactionStatus.choices, max_length=16, default=TransactionStatus.PENDING)
     destination = models.PointField(null=True)
+    created_at = models.DateTimeField(auto_created=True, default=Now())
 
     def get_total(self):
         total = 0
