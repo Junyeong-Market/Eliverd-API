@@ -60,7 +60,7 @@ class Order(models.Model):
     partials = models.ManyToManyField(PartialOrder)
     status = models.CharField(choices=TransactionStatus.choices, max_length=16, default=TransactionStatus.PENDING)
     destination = models.PointField(null=True)
-    created_at = models.DateTimeField(auto_created=True, default=Now())
+    created_at = models.DateTimeField(auto_created=True)
 
     def get_total(self):
         total = 0
