@@ -13,7 +13,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from account.documentation.session import SessionCreateSuccessful, AuthorizationHeader, LoginRequestBody
-from account.documentation.user import UserSearchParameter, UserDataErrorResponse
+from account.documentation.user import UserSearchParameter, UserDataErrorResponse, Month, UserSummaryResponse
 from account.models import Session, User
 from account.pagination import AccountSearchPagination
 from account.permissions import NotLoggedIn, LoggedIn
@@ -193,6 +193,8 @@ class UserOrderSummaryAPI(RetrieveAPIView):
     serializer_class = GetOrderSerializer
     permission_classes = []
 
+    @swagger_auto_schema(operation_summary='유저 주문 내역 요약', operation_description='유저의 주문 횟수와 총액을 가져옵니다.',
+                         manual_parameters=[Month], responses={200: UserSummaryResponse})
     def get(self, request, *args, **kwargs):
         month_offset = int(request.GET.get('month', 0))
         if month_offset > 0:

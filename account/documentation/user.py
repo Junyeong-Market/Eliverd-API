@@ -33,3 +33,27 @@ UserDataErrorResponse = openapi.Response(
     description='유저 데이터에 오류가 있을 시 오류를 반환합니다.',
     schema=UserDataErrorSchema
 )
+
+Month = openapi.Parameter(
+    'month',
+    openapi.IN_QUERY,
+    type=openapi.TYPE_INTEGER,
+    description='몇 달 전까지 조회할지 지정합니다.'
+)
+
+UserSummaryResponse = openapi.Response(
+    description='유저의 총 구매 횟수와 총액입니다.',
+    schema=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'count': openapi.Schema(
+                description='구매 횟수',
+                type=openapi.TYPE_INTEGER
+            ),
+            'total': openapi.Schema(
+                description='구매 총액',
+                type=openapi.TYPE_INTEGER
+            ),
+        }
+    )
+)
