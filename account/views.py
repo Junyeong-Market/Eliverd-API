@@ -1,11 +1,14 @@
 import hashlib
 import logging
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.decorators import permission_classes
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.generics import CreateAPIView, RetrieveDestroyAPIView, ListAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import CreateAPIView, RetrieveDestroyAPIView, ListAPIView, RetrieveUpdateDestroyAPIView, \
+    RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -15,7 +18,7 @@ from account.models import Session, User
 from account.pagination import AccountSearchPagination
 from account.permissions import NotLoggedIn, LoggedIn
 from account.serializer import UserSerializer, SessionSerializer, SafeUserSerializer, UserEditSerializer
-from purchase.models import Order
+from purchase.models import Order, TransactionStatus
 from purchase.serializer import GetOrderSerializer
 from store.models import Store
 from store.serializer import StoreSerializer
@@ -184,3 +187,23 @@ class UserOrderAPI(ListAPIView):
 
     def get_queryset(self):
         return Order.objects.filter(customer__pid=self.kwargs['pid']).order_by('-oid')
+
+
+class UserOrderSummaryAPI(RetrieveAPIView):
+    serializer_class = GetOrderSerializer
+    permission_classes = []
+
+    def get(self, request, *args, **kwargs):
+        month_offset = int(request.GET.get('month', 0))
+        if month_offset > 0:
+            orders = Order.objects.filter(created_at__gte=datetime.now() - relativedelta(month=month_offset),
+                                          status=TransactionStatus.PROCESSED, customer__pid=kwargs['pid'])
+        else:
+            orders = Order.objects.filter(status=TransactionStatus.PROCESSED, customer__pid=kwargs['pid'])
+        total, count = 0, len(orders)
+        for order in orders:
+            total += order.get_total()
+        return Response({
+            'count': count,
+            'total': total
+        })

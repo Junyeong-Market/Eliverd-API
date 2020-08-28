@@ -1,6 +1,6 @@
 from django.urls import path
 from account.views import UserInfoAPI, SessionAPI, RegisterAPI, UserDataVerifyAPI, UserSearchAPI, UserOwnedStoreAPI, \
-    UserOrderAPI
+    UserOrderAPI, UserOrderSummaryAPI
 
 urlpatterns = [
     path('session/', SessionAPI.as_view()),
@@ -9,5 +9,6 @@ urlpatterns = [
     path('user/search/<name>/', UserSearchAPI.as_view()),
     path('user/<pid>/', UserInfoAPI.as_view()),
     path('user/<pid>/stores/', UserOwnedStoreAPI.as_view()),
-    path('user/<pid>/orders/', UserOrderAPI.as_view())
+    path('user/<pid>/orders/', UserOrderAPI.as_view()),
+    path('user/<pid>/summary/', UserOrderSummaryAPI.as_view())
 ]
