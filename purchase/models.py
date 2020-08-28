@@ -48,6 +48,7 @@ class PartialOrder(models.Model):
     status = models.CharField(choices=OrderStatus.choices, max_length=16, default=OrderStatus.PENDING)
     stocks = models.ManyToManyField(OrderedStock)
     destination = models.PointField(null=True)
+    created_at = models.DateTimeField(auto_created=True)
 
 
 class Order(models.Model):
