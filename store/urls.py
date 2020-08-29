@@ -10,5 +10,6 @@ urlpatterns = [
     path('<id>/stocks/', StoreStockListAPI.as_view()),
     path('<id>/stock/', ModifyStockAPI.as_view()),
     path('<id>/orders/', StoreOrderAPI.as_view()),
+    # path('<id>/order/<poid>/', StoreOrderProcessAPI.as_view()),
     path('<id>/admin/', StoreAdminAPI.as_view())
 ]
