@@ -18,7 +18,8 @@ from product.serializer import ProductSerializer
 from product.views import CreateProductAPI
 from purchase.models import PartialOrder
 from purchase.serializer import GetPartialOrderSerializer
-from store.documentation import StoreInitBody, Lat, Lng, Distance, ModifyStockBody, Categories, ProductName
+from store.documentation import StoreInitBody, Lat, Lng, Distance, ModifyStockBody, Categories, ProductName, \
+    StockOrderBy
 from store.models import Store, Stock
 from store.pagination import StoreStockPagination
 from store.serializer import StoreSerializer, StockSerializer, FlatStoreSerializer, FlatStockSerializer, \
@@ -92,7 +93,7 @@ class StoreStockListAPI(ListAPIView):
     pagination_class = StoreStockPagination
 
     @swagger_auto_schema(operation_summary='재고 목록 조회', operation_description='상점의 재고 목록을 조회합니다.',
-                         manual_parameters=[Categories, ProductName])
+                         manual_parameters=[Categories, ProductName, StockOrderBy])
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 

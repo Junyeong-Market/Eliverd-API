@@ -107,3 +107,13 @@ ProductName = openapi.Parameter(
     description='상품 이름',
     type=openapi.TYPE_STRING
 )
+
+StockOrderByParameters = ['amount', 'id', 'price', 'product__name', 'product__ian', 'product__category']
+
+StockOrderBy = openapi.Parameter(
+    'order_by',
+    openapi.IN_QUERY,
+    description='정렬 기준',
+    type=openapi.TYPE_STRING,
+    enum=['amount', 'id', 'price', 'product__name', 'product__ian', 'product__category'] + ['-' + x for x in StockOrderByParameters]
+)
