@@ -99,7 +99,7 @@ class StoreStockListAPI(ListAPIView):
 
     def get_queryset(self):
         category = self.request.GET.get('category')
-        order = self.request.GET.get('order_by', None)
+        order = self.request.GET.get('order_by', 'id')
         if category:
             stock = Stock.objects.filter(store__id=self.kwargs['id'], amount__gt=0,
                                          product__name__contains=self.request.GET.get('name', ""),
