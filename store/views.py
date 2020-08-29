@@ -98,15 +98,13 @@ class StoreStockListAPI(ListAPIView):
         return super().get(request, *args, **kwargs)
 
     def get_queryset(self):
+        name = self.request.GET.get('name', "")
         category = self.request.GET.get('category')
         order = self.request.GET.get('order_by', 'id')
+        stock = Stock.objects.filter(store__id=self.kwargs['id'], amount__gt=0, product__name__contains=name)
         if category:
-            stock = Stock.objects.filter(store__id=self.kwargs['id'], amount__gt=0,
-                                         product__name__contains=self.request.GET.get('name', ""),
-                                         product__category=category)
-        else:
-            stock = Stock.objects.filter(store__id=self.kwargs['id'], amount__gt=0,
-                                         product__name__contains=self.request.GET.get('name', ""))
+            stock = stock.filter(product__category=category)
+
         return stock.order_by(order)
 
 
@@ -211,3 +209,5 @@ class StoreAdminAPI(ListAPIView, CreateAPIView, DestroyAPIView):
 
     def get_queryset(self):
         return Store.objects.get(id=self.kwargs['id']).registerer
+
+# class StoreOrderProcessAPI()
