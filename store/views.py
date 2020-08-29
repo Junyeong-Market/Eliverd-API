@@ -40,7 +40,8 @@ class RadiusStoreList(ListAPIView):
     def get_queryset(self):
         try:
             point = Point(float(self.request.query_params.get('lat')), float(self.request.query_params.get('lng')))
-            return Store.objects.filter(location__distance_lte=(point, float(self.request.query_params.get('distance', 0))))
+            return Store.objects.filter(
+                location__distance_lte=(point, float(self.request.query_params.get('distance', 0))))
         except TypeError:
             raise SuspiciousOperation('Bad Request')
 
@@ -97,12 +98,15 @@ class StoreStockListAPI(ListAPIView):
 
     def get_queryset(self):
         category = self.request.GET.get('category')
+        order = self.request.GET.get('order_by', None)
         if category:
-            return Stock.objects.filter(store__id=self.kwargs['id'], amount__gt=0,
-                                        product__name__contains=self.request.GET.get('name', ""),
-                                        product__category=category)
-        return Stock.objects.filter(store__id=self.kwargs['id'], amount__gt=0,
-                                    product__name__contains=self.request.GET.get('name', ""))
+            stock = Stock.objects.filter(store__id=self.kwargs['id'], amount__gt=0,
+                                         product__name__contains=self.request.GET.get('name', ""),
+                                         product__category=category)
+        else:
+            stock = Stock.objects.filter(store__id=self.kwargs['id'], amount__gt=0,
+                                         product__name__contains=self.request.GET.get('name', ""))
+        return stock.order_by(order)
 
 
 class AddStockAPI(CreateAPIView):
