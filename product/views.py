@@ -11,7 +11,7 @@ from product.pagination import ManufacturerSearchPagination
 from product.serializer import ProductSerializer, ManufacturerSerializer
 from store.documentation import Lat, Lng, Distance, ProductName, Categories, StockOrderBy
 from store.models import Stock
-from store.serializer import StockSerializer, GetStockSerializer
+from store.serializer import StockSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -93,7 +93,7 @@ class RadiusProductListAPI(ListAPIView):
 
 
 class RecommendedProductListAPI(ListAPIView):
-    serializer_class = GetStockSerializer
+    serializer_class = StockSerializer
 
     @swagger_auto_schema(operation_summary='오늘의 상품 추천',
                          operation_description='지정된 범위 내의 상품을 가져옵니다.',
@@ -102,6 +102,6 @@ class RecommendedProductListAPI(ListAPIView):
         return super().get(request, *args, **kwargs)
 
     def get_queryset(self):
-        point = Point(float(self.request.query_params.get('lat')), float(self.request.query_params.get('lng')))
+        point = Point(float(self.request.query_params.get('lat', 0)), float(self.request.query_params.get('lng', 0)))
 
         return Stock.objects.order_by('?').filter(store__location__distance_lte=(point, 5), amount__gt=0)[:5]
