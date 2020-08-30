@@ -37,6 +37,8 @@ class CreateOrderAPI(CreateAPIView):
                          manual_parameters=[AuthorizationHeader], request_body=CreateOrderBody,
                          responses={200: CreateOrderResponse})
     def post(self, request, *args, **kwargs):
+        exclude = request.GET.get('exclude')
+        exclude = exclude == 'true'
         destination = request.data.get('deliver_to', None)
         destination = Point(float(destination.get('lat')), float(destination.get('lng')))\
             if destination is not None else None
@@ -71,7 +73,8 @@ class CreateOrderAPI(CreateAPIView):
         serializer = self.get_serializer(data={
             'customer': request.account.pid,
             'partials': orders,
-            'destination': destination
+            'destination': destination,
+            'exclude': exclude
         })
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)

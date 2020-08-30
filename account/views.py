@@ -198,11 +198,9 @@ class UserOrderSummaryAPI(RetrieveAPIView):
                          manual_parameters=[Month], responses={200: UserSummaryResponse})
     def get(self, request, *args, **kwargs):
         month_offset = int(request.GET.get('month', 0))
+        orders = Order.objects.filter(status=TransactionStatus.PROCESSED, customer__pid=kwargs['pid'], exclude=False)
         if month_offset > 0:
-            orders = Order.objects.filter(created_at__gte=datetime.now() - relativedelta(month=month_offset),
-                                          status=TransactionStatus.PROCESSED, customer__pid=kwargs['pid'])
-        else:
-            orders = Order.objects.filter(status=TransactionStatus.PROCESSED, customer__pid=kwargs['pid'])
+            orders = orders.filter(created_at__gte=datetime.now() - relativedelta(month=month_offset))
         total, count = 0, len(orders)
         for order in orders:
             total += order.get_total()
