@@ -1,7 +1,9 @@
 import logging
+from datetime import datetime
 
 from django.contrib.gis.db import models
 from django.db.models.functions import Now
+from django.utils import timezone
 
 from account.models import User
 from store.models import Stock, Store
@@ -48,7 +50,7 @@ class PartialOrder(models.Model):
     status = models.CharField(choices=OrderStatus.choices, max_length=16, default=OrderStatus.PENDING)
     stocks = models.ManyToManyField(OrderedStock)
     destination = models.PointField(null=True)
-    created_at = models.DateTimeField(auto_created=True)
+    created_at = models.DateTimeField(auto_created=True, default=timezone.now)
 
 
 class Order(models.Model):
@@ -61,7 +63,7 @@ class Order(models.Model):
     partials = models.ManyToManyField(PartialOrder)
     status = models.CharField(choices=TransactionStatus.choices, max_length=16, default=TransactionStatus.PENDING)
     destination = models.PointField(null=True)
-    created_at = models.DateTimeField(auto_created=True)
+    created_at = models.DateTimeField(auto_created=True, default=timezone.now)
 
     def get_total(self):
         total = 0
