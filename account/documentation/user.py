@@ -1,7 +1,10 @@
 from drf_yasg import openapi
+from drf_yasg.inspectors import ViewInspector
 
 from account.documentation.session import IDParameter, PWParameter
 from eliverd.documentation.errors import ErrorArray
+from store.documentation import Store
+from store.serializer import StoreSerializer
 
 UserSearchParameter = openapi.Parameter(
     'is_seller',
@@ -54,6 +57,32 @@ UserSummaryResponse = openapi.Response(
                 description='구매 총액',
                 type=openapi.TYPE_INTEGER
             ),
+        }
+    )
+)
+
+SessionUserResponse = openapi.Response(
+    description='세션 유저 조회 데이터',
+    schema=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'pid': openapi.Schema(
+                type=openapi.TYPE_INTEGER
+            ),
+            'user_id': IDParameter,
+            'nickname': openapi.Schema(
+                type=openapi.TYPE_STRING
+            ),
+            'realname': openapi.Schema(
+                type=openapi.TYPE_STRING
+            ),
+            'is_seller': openapi.Schema(
+                type=openapi.TYPE_BOOLEAN
+            ),
+            'stores': openapi.Schema(
+                type=openapi.TYPE_ARRAY,
+                items=Store
+            )
         }
     )
 )

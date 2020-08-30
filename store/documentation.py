@@ -1,5 +1,6 @@
 from drf_yasg import openapi
 
+from account.documentation.models import SafeUser
 from product.models import Category
 
 StoreNameParameter = openapi.Schema(
@@ -25,6 +26,27 @@ StoreLatParameter = openapi.Schema(
 StoreLngParameter = openapi.Schema(
     description='상점 위치 정보',
     type=openapi.TYPE_NUMBER,
+)
+
+Store = openapi.Schema(
+    description='상점',
+    type=openapi.TYPE_OBJECT,
+    properties={
+        'id': openapi.Schema(
+            type=openapi.TYPE_INTEGER
+        ),
+        'name': StoreNameParameter,
+        'registerer': openapi.Schema(
+            description='관리자 목록',
+            type=openapi.TYPE_ARRAY,
+            items=SafeUser
+        ),
+        'description': StoreDescriptionParameter,
+        'registered_number': StoreRegisteredNumberParameter,
+        'location': openapi.Schema(
+            type=openapi.TYPE_STRING
+        )
+    }
 )
 
 StoreInitBody = openapi.Schema(

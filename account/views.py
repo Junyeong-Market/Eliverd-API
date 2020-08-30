@@ -13,7 +13,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from account.documentation.session import SessionCreateSuccessful, AuthorizationHeader, LoginRequestBody
-from account.documentation.user import UserSearchParameter, UserDataErrorResponse, Month, UserSummaryResponse
+from account.documentation.user import UserSearchParameter, UserDataErrorResponse, Month, UserSummaryResponse, \
+    SessionUserResponse
 from account.models import Session, User
 from account.pagination import AccountSearchPagination
 from account.permissions import NotLoggedIn, LoggedIn
@@ -117,7 +118,7 @@ class SessionAPI(CreateAPIView, RetrieveDestroyAPIView):
                          operation_description='현재 세션 유저의 정보를 조회합니다.',
                          manual_parameters=[AuthorizationHeader],
                          responses={
-                             200: SafeUserSerializer
+                             200: SessionUserResponse
                          })
     @permission_classes([LoggedIn])
     def get(self, request, *args, **kwargs):
