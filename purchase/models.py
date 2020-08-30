@@ -64,7 +64,7 @@ class Order(models.Model):
     status = models.CharField(choices=TransactionStatus.choices, max_length=16, default=TransactionStatus.PENDING)
     destination = models.PointField(null=True)
     created_at = models.DateTimeField(auto_created=True, default=timezone.now)
-    exclude = models.BooleanField(default=True)
+    exclude = models.BooleanField(default=False)
 
     def get_total(self):
         total = 0
