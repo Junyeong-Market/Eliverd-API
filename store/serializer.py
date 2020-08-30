@@ -39,6 +39,15 @@ class GetStockSerializer(serializers.ModelSerializer):
         exclude = ['store']
 
 
+class SafeStockSerializer(serializers.ModelSerializer):
+    store = StoreSerializer()
+
+    class Meta:
+        model = Stock
+        depth = 2
+        fields = '__all__'
+
+
 class FlatStockSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stock

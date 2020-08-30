@@ -11,7 +11,7 @@ from product.pagination import ManufacturerSearchPagination
 from product.serializer import ProductSerializer, ManufacturerSerializer
 from store.documentation import Lat, Lng, Distance, ProductName, Categories, StockOrderBy
 from store.models import Stock
-from store.serializer import StockSerializer
+from store.serializer import StockSerializer, SafeStockSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -70,7 +70,7 @@ class SearchManufacturerAPI(ListAPIView):
 
 
 class RadiusProductListAPI(ListAPIView):
-    serializer_class = StockSerializer
+    serializer_class = SafeStockSerializer
 
     @swagger_auto_schema(operation_summary='범위 기반 상품 검색',
                          operation_description='지정된 범위 내의 상품을 가져옵니다.',
@@ -93,7 +93,7 @@ class RadiusProductListAPI(ListAPIView):
 
 
 class RecommendedProductListAPI(ListAPIView):
-    serializer_class = StockSerializer
+    serializer_class = SafeStockSerializer
 
     @swagger_auto_schema(operation_summary='오늘의 상품 추천',
                          operation_description='지정된 범위 내의 상품을 가져옵니다.',
