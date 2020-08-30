@@ -124,7 +124,7 @@ class SessionAPI(CreateAPIView, RetrieveDestroyAPIView):
         session = self.get_object()
         serializer = SafeUserSerializer(session.pid)
         stores = Store.objects.filter(registerer=session.pid)
-        stores = [store.id for store in stores]
+        stores = [StoreSerializer(store).data for store in stores]
         data = serializer.data
         data.update({"stores": stores})
         return Response(data)

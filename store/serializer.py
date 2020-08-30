@@ -14,7 +14,6 @@ class StoreSerializer(serializers.ModelSerializer):
 
 
 class FlatStoreSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Store
         fields = '__all__'
