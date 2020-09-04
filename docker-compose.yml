@@ -3,14 +3,4 @@ services:
   server:
     container_name: "eliverd_server"
     build: .
-    ports:
-      - "8000:8000"
-    command: sh ./entrypoint.sh
-    environment:
-      DB_NAME: eliverd
-      DB_USER: eliverd
-      DB_PW: eliverd
-      DB_HOST: mariadb
-      DB_PORT: 3306
-    restart: on-failure
     image: startergate/eliverd-api
