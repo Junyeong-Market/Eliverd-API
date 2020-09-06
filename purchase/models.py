@@ -44,12 +44,12 @@ class OrderedStock(models.Model):
 
 
 class PartialOrder(models.Model):
-
     poid = models.AutoField(primary_key=True)
     store = models.ForeignKey(Store, on_delete=models.CASCADE, null=True)
     status = models.CharField(choices=OrderStatus.choices, max_length=16, default=OrderStatus.PENDING)
     stocks = models.ManyToManyField(OrderedStock)
     destination = models.PointField(null=True)
+    transport = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(auto_created=True, default=timezone.now)
 
 
