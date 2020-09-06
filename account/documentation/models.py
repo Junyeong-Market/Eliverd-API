@@ -15,8 +15,8 @@ SafeUser = openapi.Schema(
         'realname': openapi.Schema(
             type=openapi.TYPE_STRING
         ),
-        'is_seller': openapi.Schema(
-            type=openapi.TYPE_BOOLEAN
+        'home': openapi.Schema(
+            type=openapi.TYPE_STRING
         )
     }
 )
