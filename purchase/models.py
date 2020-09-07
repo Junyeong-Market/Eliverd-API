@@ -1,4 +1,5 @@
 import logging
+import uuid
 
 from django.contrib.gis.db import models
 from django.utils import timezone
@@ -48,6 +49,7 @@ class PartialOrder(models.Model):
     stocks = models.ManyToManyField(OrderedStock)
     destination = models.PointField(null=True)
     transport = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    transport_token = models.UUIDField(default=uuid.uuid4)
     created_at = models.DateTimeField(auto_created=True, default=timezone.now)
 
 
