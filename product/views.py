@@ -11,7 +11,7 @@ from product.pagination import ManufacturerSearchPagination
 from product.serializer import ProductSerializer, ManufacturerSerializer
 from store.documentation import Lat, Lng, Distance, ProductName, Categories, StockOrderBy
 from store.models import Stock
-from store.serializer import StockSerializer, SafeStockSerializer
+from store.serializer import SafeStockSerializer
 
 logger = logging.getLogger(__name__)
 
