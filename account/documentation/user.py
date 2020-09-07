@@ -76,9 +76,6 @@ SessionUserResponse = openapi.Response(
             'realname': openapi.Schema(
                 type=openapi.TYPE_STRING
             ),
-            'is_seller': openapi.Schema(
-                type=openapi.TYPE_BOOLEAN
-            ),
             'stores': openapi.Schema(
                 type=openapi.TYPE_ARRAY,
                 items=Store
