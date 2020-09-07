@@ -19,8 +19,8 @@ from account.models import Session, User
 from account.pagination import AccountSearchPagination
 from account.permissions import NotLoggedIn, LoggedIn
 from account.serializer import UserSerializer, SessionSerializer, SafeUserSerializer, UserEditSerializer
-from purchase.models import Order, TransactionStatus
-from purchase.serializer import GetOrderSerializer
+from purchase.models import Order, TransactionStatus, PartialOrder
+from purchase.serializer import GetOrderSerializer, GetPartialOrderSerializer
 from store.models import Store
 from store.serializer import StoreSerializer
 
@@ -208,3 +208,14 @@ class UserOrderSummaryAPI(RetrieveAPIView):
             'count': count,
             'total': total
         })
+
+
+class DeliveryListAPI(ListAPIView):
+    serializer_class = GetPartialOrderSerializer
+
+    @swagger_auto_schema(operation_summary='처리한 배달 내역', operation_description='유저가 처리한 배달 내역을 가져옵니다.')
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return PartialOrder.objects.filter(transport__pid=self.kwargs['pid'])
