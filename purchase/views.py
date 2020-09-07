@@ -146,7 +146,7 @@ class SuccessOrderAPI(RetrieveAPIView):
                 result = stock.stock.save()
                 logger.info(result)
                 stock.save()
-            
+
             if order.destination:
                 partial.status = OrderStatus.READY
                 partial.transport_token = uuid.uuid4()
