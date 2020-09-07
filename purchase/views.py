@@ -1,6 +1,7 @@
 import json
 import os
 import logging
+import uuid
 
 import requests
 from django.contrib.gis.geos import Point
@@ -145,7 +146,12 @@ class SuccessOrderAPI(RetrieveAPIView):
                 result = stock.stock.save()
                 logger.info(result)
                 stock.save()
-            partial.status = OrderStatus.READY if order.destination else OrderStatus.DONE
+            
+            if order.destination:
+                partial.status = OrderStatus.READY
+                partial.transport_token = uuid.uuid4()
+            else:
+                partial.status = OrderStatus.DONE
         order.status = TransactionStatus.PROCESSED
         order.save()
         self.order = order
