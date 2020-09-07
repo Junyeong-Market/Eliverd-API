@@ -21,3 +21,18 @@ class StartDeliveryAPI(RetrieveAPIView):
         p_order.save()
         return p_order
 
+
+class ReceiveDeliveryAPI(RetrieveAPIView):
+    serializer_class = GetPartialOrderSerializer
+
+    @swagger_auto_schema(operation_summary='배달 완료', operation_description='배달된 상품을 수령합니다.',
+                         manual_parameters=[DeliveryToken])
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    def get_object(self):
+        p_order = PartialOrder.objects.get()
+        p_order.status = OrderStatus.DELIVERED
+        p_order.transport_token = None
+        p_order.save()
+        return p_order
