@@ -49,7 +49,7 @@ class PartialOrder(models.Model):
     stocks = models.ManyToManyField(OrderedStock)
     destination = models.PointField(null=True)
     transport = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    transport_token = models.UUIDField(default=uuid.uuid4)
+    transport_token = models.UUIDField(null=True)
     created_at = models.DateTimeField(auto_created=True, default=timezone.now)
 
 
