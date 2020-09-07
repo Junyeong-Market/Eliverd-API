@@ -1,8 +1,8 @@
 from django.urls import path
 
-from delivery.views import StartDeliveryAPI, ReceiveDeliveryAPI
+from delivery.views import DeliveryHandlerAPI
 
 urlpatterns = [
-    path('start/', StartDeliveryAPI.as_view()),
-    path('receive/', ReceiveDeliveryAPI.as_view()),
+    path('/', DeliveryHandlerAPI.as_view()),
+    path('processing/', MyDeliveryJobAPI.as_view())
 ]
