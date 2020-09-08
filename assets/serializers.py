@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from eliverd.models import Asset
+from assets.models import Asset
 
 
 class AssetSerializer(serializers.ModelSerializer):
