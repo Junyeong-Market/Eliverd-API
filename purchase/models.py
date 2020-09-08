@@ -23,7 +23,6 @@ class OrderStatus(models.TextChoices):
     DELIVERING = 'delivering'
     DELIVERED = 'delivered'
     CANCELED = 'canceled'
-    DONE = 'done'
 
 
 class StockAppliedStatus(models.IntegerChoices):

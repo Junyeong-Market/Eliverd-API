@@ -151,7 +151,7 @@ class SuccessOrderAPI(RetrieveAPIView):
                 partial.status = OrderStatus.READY
                 partial.transport_token = uuid.uuid4()
             else:
-                partial.status = OrderStatus.DONE
+                partial.status = OrderStatus.DELIVERED
         order.status = TransactionStatus.PROCESSED
         order.save()
         self.order = order
