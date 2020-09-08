@@ -41,6 +41,7 @@ class GetOrderedStockSerializer(serializers.ModelSerializer):
 class GetPartialOrderSerializer(serializers.ModelSerializer):
     store = StoreSerializer()
     stocks = GetOrderedStockSerializer(many=True)
+    transport = SafeUserSerializer()
 
     class Meta:
         model = PartialOrder
