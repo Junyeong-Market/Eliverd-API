@@ -58,6 +58,7 @@ INSTALLED_APPS = [
 
     # Server
     'account',
+    'assets',
     'delivery',
     'product',
     'purchase',
