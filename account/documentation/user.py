@@ -83,3 +83,10 @@ SessionUserResponse = openapi.Response(
         }
     )
 )
+
+IsActive = openapi.Parameter(
+    'is_active',
+    openapi.IN_QUERY,
+    type=openapi.TYPE_BOOLEAN,
+    description='지금 배달 중인 주문만 조회합니다.'
+)

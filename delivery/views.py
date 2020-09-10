@@ -34,8 +34,8 @@ class MyDeliveryJobAPI(RetrieveAPIView):
     serializer_class = GetPartialOrderSerializer
     permission_classes = [LoggedIn]
 
-    @swagger_auto_schema(operation_summary='처리하고 있는 배달 가져오기', operation_description='유저가 처리하고 있는 배달을 가져옵니다.',
-                         manual_parameters=[AuthorizationHeader])
+    @swagger_auto_schema(operation_summary='처리하고 있는 배달 가져오기 [DEPRECATED]',
+                         operation_description='유저가 처리하고 있는 배달을 가져옵니다.', manual_parameters=[AuthorizationHeader])
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
