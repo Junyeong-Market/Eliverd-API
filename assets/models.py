@@ -1,9 +1,13 @@
+import logging
+import os
+
 from django.contrib.gis.db import models
+from django.utils.timezone import now
+
+logger = logging.getLogger(__name__)
 
 
 def upload_image_to(instance, filename):
-    import os
-    from django.utils.timezone import now
     filename_base, filename_ext = os.path.splitext(filename)
     return 'statics/%s/%s' % (
         now().strftime("%Y%m%d"),
