@@ -6,8 +6,6 @@ from rest_framework.parsers import FileUploadParser
 
 from assets.serializers import AssetSerializer
 
-logger = logging.getLogger(__name__)
-
 
 class FileUploadAPI(CreateAPIView):
     serializer_class = AssetSerializer
@@ -16,5 +14,4 @@ class FileUploadAPI(CreateAPIView):
     @swagger_auto_schema(operation_summary='파일 업로드', operation_description='파일을 AWS S3로 업로드합니다.')
     def post(self, request, *args, **kwargs):
         request.data['image'] = request.data['file']
-
         return super().post(request, *args, **kwargs)
