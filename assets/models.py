@@ -5,7 +5,7 @@ def upload_image_to(instance, filename):
     import os
     from django.utils.timezone import now
     filename_base, filename_ext = os.path.splitext(filename)
-    return 'posts/%s/%s' % (
+    return 'statics/%s/%s' % (
         now().strftime("%Y%m%d"),
         instance.id
     )

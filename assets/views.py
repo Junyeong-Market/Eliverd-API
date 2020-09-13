@@ -1,3 +1,14 @@
-from django.shortcuts import render
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework.generics import CreateAPIView
+from rest_framework.parsers import FileUploadParser
 
-# Create your views here.
+from assets.serializers import AssetSerializer
+
+
+class FileUploadAPI(CreateAPIView):
+    serializer_class = AssetSerializer
+    parser_classes = [FileUploadParser]
+
+    @swagger_auto_schema(operation_summary='파일 업로드', operation_description='파일을 AWS S3로 업로드합니다.')
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
