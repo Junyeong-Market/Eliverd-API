@@ -5,6 +5,8 @@ import uuid
 
 from django.contrib.gis.db import models
 
+from assets.models import Asset
+
 logger = logging.getLogger(__name__)
 
 
@@ -23,6 +25,7 @@ class User(models.Model):
     realname = models.CharField(max_length=128, default='사용자')
     nickname = models.CharField(max_length=50, unique=True)
     home = models.PointField(null=True)
+    profile = models.ForeignKey(Asset, models.SET_NULL, null=True)
 
 
 class Session(models.Model):

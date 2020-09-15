@@ -2,6 +2,8 @@ import uuid
 
 from django.contrib.gis.db import models
 
+from assets.models import Asset
+
 
 class Manufacturer(models.Model):
     id = models.AutoField(primary_key=True)
@@ -35,4 +37,5 @@ class Product(models.Model):
     manufacturer = models.ForeignKey(Manufacturer, models.CASCADE)
     category = models.CharField(choices=Category.choices, max_length=32, default=Category.FOOD)
     ian = models.CharField(max_length=36, default=uuid.uuid4)  # International Article Number == 바코드
+    picture = models.ForeignKey(Asset, models.SET_NULL, null=True)
 
