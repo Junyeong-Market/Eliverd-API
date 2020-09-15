@@ -1,5 +1,5 @@
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework.generics import RetrieveAPIView, get_object_or_404, ListAPIView
+from rest_framework.generics import RetrieveAPIView, get_object_or_404
 
 from account.documentation.session import AuthorizationHeader
 from account.permissions import LoggedIn

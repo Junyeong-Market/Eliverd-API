@@ -209,5 +209,3 @@ class StoreAdminAPI(ListAPIView, CreateAPIView, DestroyAPIView):
 
     def get_queryset(self):
         return Store.objects.get(id=self.kwargs['id']).registerer
-
-# class StoreOrderProcessAPI()

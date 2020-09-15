@@ -1,10 +1,8 @@
 from drf_yasg import openapi
-from drf_yasg.inspectors import ViewInspector
 
 from account.documentation.session import IDParameter, PWParameter
 from eliverd.documentation.errors import ErrorArray
 from store.documentation import Store
-from store.serializer import StoreSerializer
 
 UserSearchParameter = openapi.Parameter(
     'is_seller',
