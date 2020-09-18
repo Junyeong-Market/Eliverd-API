@@ -5,20 +5,20 @@ from rest_framework import serializers
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['user_id', 'password', 'realname', 'nickname']
+        fields = '__all__'
 
 
 class SafeUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         depth = 2
-        fields = ['pid', 'user_id', 'nickname', 'realname']
+        exclude = ['password']
 
 
 class UserEditSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['nickname', 'realname']
+        fields = ['password', 'nickname', 'realname', 'home', 'profile']
 
 
 class SessionSerializer(serializers.ModelSerializer):

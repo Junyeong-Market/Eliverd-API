@@ -47,7 +47,7 @@ class UserInfoAPI(RetrieveUpdateDestroyAPIView):
         return super().get(request, *args, **kwargs)
 
     @swagger_auto_schema(operation_summary='사용자 정보 수정',
-                         operation_description='비밀번호, 실명, 닉네임, 판매자 여부를 수정합니다.',
+                         operation_description='비밀번호, 실명, 닉네임를 수정합니다.',
                          manual_parameters=[AuthorizationHeader])
     @permission_classes([LoggedIn])
     def put(self, request, *args, **kwargs):
@@ -60,8 +60,6 @@ class UserInfoAPI(RetrieveUpdateDestroyAPIView):
                          manual_parameters=[AuthorizationHeader])
     @permission_classes([LoggedIn])
     def patch(self, request, *args, **kwargs):
-        if request.account.pid != self.kwargs['pid']:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     @swagger_auto_schema(operation_summary='사용자 탈퇴',

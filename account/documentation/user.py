@@ -1,6 +1,7 @@
 from drf_yasg import openapi
 
 from account.documentation.session import IDParameter, PWParameter
+from assets.documentations import Asset
 from eliverd.documentation.errors import ErrorArray
 from store.documentation import Store
 
@@ -74,6 +75,10 @@ SessionUserResponse = openapi.Response(
             'realname': openapi.Schema(
                 type=openapi.TYPE_STRING
             ),
+            'home': openapi.Schema(
+                type=openapi.TYPE_STRING
+            ),
+            'profile': Asset,
             'stores': openapi.Schema(
                 type=openapi.TYPE_ARRAY,
                 items=Store
