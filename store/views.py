@@ -179,7 +179,7 @@ class ModifyStockAPI(UpdateModelMixin, CreateAPIView):
                                  product=Product.objects.get(ian=self.request.data.get('ian', 'notexist')))
 
 
-class StoreOrderAPI(ListAPIView):
+class StoreOrderListAPI(ListAPIView):
     serializer_class = GetPartialOrderSerializer
     pagination_class = AccountSearchPagination
 
@@ -190,6 +190,18 @@ class StoreOrderAPI(ListAPIView):
 
     def get_queryset(self):
         return PartialOrder.objects.filter(store__id=self.kwargs['id']).order_by('-poid')
+
+
+class StoreOrderAPI(RetrieveAPIView):
+    serializer_class = GetPartialOrderSerializer
+
+    @swagger_auto_schema(operation_summary='상점 주문 조회',
+                         operation_description='지정된 주문을 조회합니다.')
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    def get_object(self):
+        return PartialOrder.objects.get(store__id=self.kwargs['id'], poid=self.kwargs['poid'])
 
 
 class StoreAdminAPI(ListAPIView, CreateAPIView, DestroyAPIView):
