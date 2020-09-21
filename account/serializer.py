@@ -18,7 +18,7 @@ class SafeUserSerializer(serializers.ModelSerializer):
 class UserEditSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['password', 'nickname', 'realname', 'home', 'profile']
+        fields = ['nickname', 'realname', 'profile']
 
 
 class SessionSerializer(serializers.ModelSerializer):
