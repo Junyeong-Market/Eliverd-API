@@ -4,4 +4,4 @@
 
 Run `./setup.sh` to install dependencies. It takes around 20~30 minutes.
 
-This code will try to download and build GEOS and GDAL. Setup script supports macOS and Linux.
+This code will try to download and build [GEOS](https://github.com/libgeos/geos) and [GDAL](https://github.com/OSGeo/gdal). Setup script supports macOS and Linux.
